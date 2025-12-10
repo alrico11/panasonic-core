@@ -16,6 +16,14 @@
         "noImplicitAny": false,
         "strictBindCallApply": false,
         "forceConsistentCasingInFileNames": false,
-        "noFallthroughCasesInSwitch": false
+        "noFallthroughCasesInSwitch": false,
+        "paths": {
+            "cakrawala-hub-library-api": [
+                "../cakrawala-hub-library-api/src/"
+            ],
+            "cakrawala-hub-library-api/*": [
+                "../cakrawala-hub-library-api/src/*"
+            ]
+        }
     }
 }
