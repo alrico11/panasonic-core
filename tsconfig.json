@@ -19,11 +19,12 @@
         "noFallthroughCasesInSwitch": false,
         "paths": {
             "cakrawala-hub-library-api": [
-                "../cakrawala-hub-library-api/src/"
+                "./../cakrawala-hub-library-api/src"
             ],
             "cakrawala-hub-library-api/*": [
-                "../cakrawala-hub-library-api/src/*"
+                "./../cakrawala-hub-library-api/src/*"
             ]
         }
-    }
+    },
+    // "include": ["../cakrawala-hub-library-api/src/**/*"]
 }
