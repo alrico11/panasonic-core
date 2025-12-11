@@ -21,3 +21,15 @@ node dist/apps/customer-portal/main.js
 node dist/apps/partner-portal/main.js
 ```
 
+## Add new App / Library
+
+``` sh
+npx nest generate app my-app
+npx nest generate library my-library
+
+```
+
+## Troubleshoot
+
+Note: the `cakrawala-hub-library-api` is in separate GIT repo. the repo must exists in the parent directory in the same-level (siblings) with identical folder name. The path is hard-coded in the NestJS project config (`nest-cli.json`) and Typescript config (`tsconfig.json`)
+
