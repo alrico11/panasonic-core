@@ -16,7 +16,7 @@ function setupOpenApi(app: INestApplication) {
     const documentFactory = () => SwaggerModule.createDocument(app, config);
 
     app.use(
-        `${apiDocsPrefix}*`, // Protect Swagger
+        `${apiDocsPrefix}/*any`, // Protect Swagger
         expressBasicAuth({
             challenge: true,
             users: { [creds]: creds },

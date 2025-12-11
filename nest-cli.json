@@ -2,5 +2,5 @@
     "$schema": "https://json.schemastore.org/nest-cli",
     "collection": "@nestjs/schematics",
     "sourceRoot": "src",
-    "entryFile": "cakrawala-hub-customer-portal-api/src/main"
+    "entryFile": "cakrawala-hub-core-api/src/main"
 }
