@@ -1,13 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { CustomerPortalService } from './customer-portal.service';
 
 @Controller()
-export class AppController {
-    constructor(private readonly appService: AppService) { }
+export class CustomerPortalController {
+  constructor(private readonly customerPortalService: CustomerPortalService) {}
 
     @Get()
     getHello(): object {
-        return this.appService.getWelcome();
+        return this.customerPortalService.getWelcome();
     }
 
     @Get('health')
@@ -17,11 +17,11 @@ export class AppController {
 
     @Get('library-data')
     getLibraryData(): object {
-        return this.appService.getLibraryData();
+        return this.customerPortalService.getLibraryData();
     }
 
     @Get('library-info')
     getLibraryInfo(): object {
-        return this.appService.getLibraryInfo();
+        return this.customerPortalService.getLibraryInfo();
     }
 }
