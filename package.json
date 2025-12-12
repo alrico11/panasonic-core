@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Customer Portal API - Port 4001",
   "scripts": {
+    "build:lib": "cd ../cakrawala-hub-library-api && npm run build && rsync -a dist/ ../cakrawala-hub-core-api/libs/",
+    "prebuild": "npm run build:lib",
     "build": "nest build customer-portal partner-portal",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/cakrawala-hub-customer-portal-api/src/main"
+    "start:prod": "node dist/apps/customer-portal/main.js"
   },
   "engines": {
     "node": "24.x.x",
