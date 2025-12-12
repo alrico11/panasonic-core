@@ -130,7 +130,7 @@ export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable("customers", (table) => {
         table.increments("id").primary().comment("PK");
         table.string("old_customer_id").comment("for migration data prevent loss data");
-        table.uuid("user_id").comment("users.id (FK reference)");
+        table.integer("user_id")
         table.boolean("delete_flag").defaultTo(false);
         table.string("email").comment("constraint with mobile_phone");
         table.string("account_name");
