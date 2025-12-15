@@ -21,7 +21,7 @@ export class PartnerPortalController {
 
   @Get('health')
   getHealth(): object {
-    return { status: 'ok', service: 'customer-portal-api', port: 4001 };
+    return { status: 'ok', service: 'partner-portal-api', port: 4002 };
   }
 
   @Get('library-data')
