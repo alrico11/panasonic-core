@@ -1,8 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { PartnerPortalModule } from './partner-portal.module';
-import { INestApplication } from '@nestjs/common';
+import { Logger, type INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { Logger } from '@nestjs/common';
 import * as expressBasicAuth from 'express-basic-auth';
 
 function setupOpenApi(app: INestApplication) {
@@ -27,11 +26,11 @@ function setupOpenApi(app: INestApplication) {
 
 }
 
-
 async function bootstrap() {
   const app = await NestFactory.create(PartnerPortalModule);
-  const port = process.env.PORT || 4002;
+  const port = process.env.PORT || 4001;
 
+  // Enable swagger on non-production
   if (process.env.NODE_ENV !== 'production') {
     Logger.warn(`Application running in NON-PRODUCTION mode.`)
     setupOpenApi(app)
