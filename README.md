@@ -29,6 +29,13 @@ npx nest generate library my-library
 
 ```
 
+## Create Migrations
+
+``` sh
+npm run migrate:make -- create-table-user
+```
+
+
 ## Troubleshoot
 
 Note: the `cakrawala-hub-library-api` is in separate GIT repo. the repo must exists in the parent directory in the same-level (siblings) with identical folder name. The path is hard-coded in the NestJS project config (`nest-cli.json`) and Typescript config (`tsconfig.json`)

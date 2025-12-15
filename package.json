@@ -11,7 +11,11 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod:customer-portal": "node dist/apps/customer-portal/main.js",
-    "start:prod:partner-portal": "node dist/apps/partner-portal/main.js"
+    "start:prod:partner-portal": "node dist/apps/partner-portal/main.js",
+    "migrate:make": "knex migrate:make",
+    "migrate:latest": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback",
+    "migrate:list": "knex migrate:list"
   },
   "engines": {
     "node": "24.x.x",
@@ -24,15 +28,19 @@
     "@types/node": "^24.10.3",
     "cpx2": "^8.0.0",
     "ts-loader": "^9.5.4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.9",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.9",
     "@nestjs/platform-express": "^11.1.9",
     "@nestjs/swagger": "^11.2.3",
     "express-basic-auth": "^1.2.1",
+    "knex": "^3.1.0",
     "objection": "^3.1.5",
+    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2"
   }
 }
