@@ -53,8 +53,11 @@ npm run migrate:make -- create-table-user
 ## Create Seeds
 
 ``` sh
+# Create new seed data
 npx knex seed:make initial-roles
+# Running seeds
 npx knex seed:run --specific=initial-roles.ts
+npx knex seed:run --specific=initial-customers.ts
 
 ```
 
