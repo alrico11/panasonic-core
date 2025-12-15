@@ -10,7 +10,7 @@ import { SampleModule } from '@lib';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.partner-portal', '.env.local', '.env']
+      envFilePath: ['.env.partner-portal.local', '.env.partner-portal']
     }),
     DatabaseModule,
     LibraryModule,
