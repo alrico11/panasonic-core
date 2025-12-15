@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { CustomerPortalController } from './customer-portal.controller';
 import { CustomerPortalService } from './customer-portal.service';
-import { LibraryModule } from '@lib';
+import { AuthenticationModule, LibraryModule } from '@lib';
 import { DatabaseModule } from '@lib';
 import { SampleModule } from '@lib';
 import { ConfigModule } from '@nestjs/config';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
   imports: [
@@ -12,9 +13,11 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: ['.env.local', '.env']
     }),
+    AuthenticationModule,
     DatabaseModule,
     LibraryModule,
-    SampleModule
+    SampleModule,
+    CustomerModule
   ],
   controllers: [CustomerPortalController],
   providers: [

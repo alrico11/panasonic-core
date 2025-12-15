@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { CustomerPortalService } from './customer-portal.service';
-import { SampleService } from '@lib';
+import { Action, SampleService } from '@lib';
 
 @Controller()
 export class CustomerPortalController {

@@ -50,6 +50,13 @@ npx nest generate library my-library
 npm run migrate:make -- create-table-user
 ```
 
+## Create Seeds
+
+``` sh
+npx knex seed:make initial-roles
+npx knex seed:run --specific=initial-roles.ts
+
+```
 
 ## Troubleshoot
 
