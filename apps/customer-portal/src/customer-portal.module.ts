@@ -10,7 +10,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.customer-portal', '.env']
+      envFilePath: ['.env.customer-portal', '.env.local', '.env']
     }),
     DatabaseModule,
     LibraryModule,

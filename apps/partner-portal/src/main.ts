@@ -36,7 +36,12 @@ async function bootstrap() {
     setupOpenApi(app)
   }
 
+  app.enableCors({
+    origin: process.env.FE_URL,
+    credentials: true,
+  });
   await app.listen(port);
   console.log(`🚀 Partner Portal API running on http://localhost:${port}`);
+  console.log(`Updated CORS Origin: ${process.env.FE_URL}`);
 }
 bootstrap();
