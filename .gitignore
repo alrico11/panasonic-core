@@ -21,3 +21,6 @@ coverage/
 
 # Exports
 exports/
+
+# Ignore JWT's keys
+/key_*

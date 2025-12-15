@@ -4,7 +4,22 @@
 
 ## Getting started
 
+### Generate JWT's Keys
+
 ``` sh
+# Generate private & public key or use default
+openssl ecparam -name prime256v1 -genkey -noout -out key_private.pem
+openssl ec -in key_private.pem -pubout -out key_public.pem
+
+```
+
+### Setup Development
+
+Copy and modify `.env.example` to `.env`
+
+
+``` sh
+# Install NPM Dependencies
 npm ci
 
 # Start Customer Portal API
