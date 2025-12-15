@@ -11,7 +11,7 @@ import { CustomerModule } from './customer/customer.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.customer-portal', '.env']
+      envFilePath: ['.env.customer-portal', '.env.local', '.env']
     }),
     DatabaseModule,
     LibraryModule,
