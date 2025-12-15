@@ -1,11 +1,10 @@
+import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
-import { CustomerPortalController } from './customer-portal.controller';
-import { CustomerPortalService } from './customer-portal.service';
-import { AuthenticationModule, LibraryModule } from '@lib';
-import { DatabaseModule } from '@lib';
-import { SampleModule } from '@lib';
 import { ConfigModule } from '@nestjs/config';
-import { CustomerModule } from './customer/customer.module';
+import { AuthenticationModule, CustomerModule, LibraryModule, DatabaseModule, SampleModule, AccessTokenGuard } from '@lib';
+import { IndexController } from './controllers/index.controller';
+import { CustomerController } from './controllers/customer.controller';
+import { CustomersController } from './controllers/customers.controller';
 
 @Module({
   imports: [
@@ -19,9 +18,13 @@ import { CustomerModule } from './customer/customer.module';
     SampleModule,
     CustomerModule
   ],
-  controllers: [CustomerPortalController],
+  controllers: [IndexController, CustomerController, CustomersController],
   providers: [
-    CustomerPortalService
+    {
+      // Use auth guard for all controller, except it has @NoLogin decorator
+      provide: APP_GUARD,
+      useExisting: AccessTokenGuard
+    }
   ],
 })
 export class CustomerPortalModule { }
