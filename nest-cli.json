@@ -7,6 +7,7 @@
   "root": "apps/customer-portal",
   "compilerOptions": {
     "webpack": true,
+    "webpackConfigPath": "webpack.config.js",
     "tsConfigPath": "apps/customer-portal/tsconfig.app.json"
   },
   "projects": {
@@ -16,6 +17,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/customer-portal/src",
       "compilerOptions": {
+        "webpackConfigPath": "webpack.config.js",
         "tsConfigPath": "apps/customer-portal/tsconfig.app.json"
       }
     },
@@ -34,6 +36,7 @@
       "entryFile": "main",
       "sourceRoot": "apps/partner-portal/src",
       "compilerOptions": {
+        "webpackConfigPath": "webpack.config.js",
         "tsConfigPath": "apps/partner-portal/tsconfig.app.json"
       }
     }
