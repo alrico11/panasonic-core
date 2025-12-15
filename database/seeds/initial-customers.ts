@@ -1,6 +1,7 @@
-import { MembershipTypeEnum } from "@lib";
+import { enums } from "@lib";
 import { Knex } from "knex";
 
+const { MembershipTypeEnum } = enums
 export async function seed(knex: Knex): Promise<void> {
 	// remove all existing entries
 	// await knex('customers').del();
