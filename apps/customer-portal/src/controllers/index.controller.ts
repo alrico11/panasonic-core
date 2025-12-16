@@ -24,4 +24,13 @@ export class IndexController {
             status: 'ok'
         }
     }
+
+    @Get('library-data')
+    @NoLogin()
+    getLibraryData(): object {
+        return {
+            data: this.libraryService.getSampleData(),
+            info: this.libraryService.getLibraryInfo()
+        }
+    }
 }

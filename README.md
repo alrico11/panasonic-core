@@ -31,15 +31,18 @@ npm ci
 # Start Customer Portal API
 npm run start:dev -- customer-portal
 npm run start:dev -- partner-portal
+npm run start:dev -- technician-portal
 
 # Build All App, the library will be embeded in app's code
 npm run build -- customer-portal
 npm run build -- partner-portal
+npm run build -- technician-portal
 
 #Run production mode
 export NODE_ENV=production
 node dist/apps/customer-portal/main.js
 node dist/apps/partner-portal/main.js
+node dist/apps/technician-portal/main.js
 ```
 
 ## Add new App / Library

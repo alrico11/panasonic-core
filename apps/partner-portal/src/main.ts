@@ -30,7 +30,7 @@ function setupOpenApi(app: INestApplication) {
 
 async function bootstrap() {
   const app = await NestFactory.create(PartnerPortalModule);
-  const port = process.env.PORT || 4001;
+  const port = process.env.PORT || 4002;
 
   const instance: express.Application = app.getHttpAdapter().getInstance()
   instance.set('query parser', (str) => parse(str, { arrayLimit: 100 }));
@@ -53,6 +53,5 @@ async function bootstrap() {
   });
   await app.listen(port);
   console.log(`🚀 Partner Portal API running on http://localhost:${port}`);
-  console.log(`Updated CORS Origin: ${process.env.FE_URL}`);
 }
 bootstrap();
