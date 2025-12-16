@@ -9,6 +9,8 @@
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
+    "start:dev:customer-portal": "nest start customer-portal --watch",
+    "start:dev:partner-portal": "nest start partner-portal --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod:customer-portal": "node dist/apps/customer-portal/main.js",
     "start:prod:partner-portal": "node dist/apps/partner-portal/main.js",

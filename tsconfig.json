@@ -19,7 +19,10 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@lib": [
-        "libs/index"
+        "../cakrawala-hub-library-api/src"
+      ],
+      "@lib/*": [
+        "../cakrawala-hub-library-api/src/*"
       ]
     }
   },
