@@ -12,6 +12,7 @@ const config: Knex.Config = {
   seeds: {
     directory: './database/seeds',
     extension: 'ts'
-  }
+  },
+  wrapIdentifier: (value, origImpl) => origImpl(value.replace(/"/g, ''))
 }
 module.exports = config;
