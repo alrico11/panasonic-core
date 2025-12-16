@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Post, Query, Req } from '@nestjs/common';
 import { LibraryService, NoLogin, PaginationDto, RbacService } from '@lib';
 import { ApiOperation } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @Controller()
 export class IndexController {
@@ -23,6 +24,23 @@ export class IndexController {
         return {
             status: 'ok'
         }
+    }
+
+    @Get('check-login')
+    @ApiOperation({
+        description: "Check login status"
+    })
+    getAuth(@Req() req: Request) {
+        return req.token
+    }
+
+    @Post('login')
+    @NoLogin()
+    @ApiOperation({
+        description: "Do login using email and password"
+    })
+    login() {
+        // return req.token
     }
 
     @Get('library-data')
