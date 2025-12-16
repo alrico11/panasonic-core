@@ -39,6 +39,16 @@
         "webpackConfigPath": "webpack.config.js",
         "tsConfigPath": "apps/partner-portal/tsconfig.app.json"
       }
+    },
+    "technician-portal": {
+      "type": "application",
+      "root": "apps/technician-portal",
+      "entryFile": "main",
+      "sourceRoot": "apps/technician-portal/src",
+      "compilerOptions": {
+        "webpackConfigPath": "webpack.config.js",
+        "tsConfigPath": "apps/technician-portal/tsconfig.app.json"
+      }
     }
   }
 }

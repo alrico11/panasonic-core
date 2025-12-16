@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { PartnerPortalModule } from './partner-portal.module';
-import { Logger, type INestApplication } from '@nestjs/common';
+import { Logger, ValidationPipe, type INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
+import type express from 'express';
+import { parse } from 'qs';
 
 function setupOpenApi(app: INestApplication) {
   const creds = process.env['APIDOCS_CREDS'] ?? 'ApiDocsSecret'
@@ -28,20 +30,28 @@ function setupOpenApi(app: INestApplication) {
 
 async function bootstrap() {
   const app = await NestFactory.create(PartnerPortalModule);
-  const port = process.env.PORT || 4001;
+  const port = process.env.PORT || 4002;
+
+  const instance: express.Application = app.getHttpAdapter().getInstance()
+  instance.set('query parser', (str) => parse(str, { arrayLimit: 100 }));
 
   // Enable swagger on non-production
   if (process.env.NODE_ENV !== 'production') {
     Logger.warn(`Application running in NON-PRODUCTION mode.`)
     setupOpenApi(app)
+
+    // Trust proxy from local network
+    // instance.set('trust proxy', process.env.INTERNAL_IPS || 'loopback,uniquelocal')
+    // Enable pretty JSON
+    instance.set('json spaces', 2)
   }
 
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors({
     origin: process.env.FE_URL,
     credentials: true,
   });
   await app.listen(port);
   console.log(`🚀 Partner Portal API running on http://localhost:${port}`);
-  console.log(`Updated CORS Origin: ${process.env.FE_URL}`);
 }
 bootstrap();

@@ -10,21 +10,20 @@ import {
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomersController } from './controllers/customers.controller';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.partner-portal', '.env']
+      envFilePath: ['.env.technician-portal', '.env']
     }),
     AuthenticationModule,
     DatabaseModule,
-    LibraryModule,
     SampleModule,
+    LibraryModule,
     CustomerModule,
-    RbacModule
+    RbacModule,
   ],
   controllers: [IndexController, CustomersController],
   providers: [],
 })
-export class PartnerPortalModule { }
+export class TechnicianPortalModule { }
