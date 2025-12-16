@@ -6,11 +6,13 @@ import {
   DatabaseModule,
   LibraryModule,
   RbacModule,
-  SampleModule
+  SampleModule,
+  UserModule
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomersController } from './controllers/customers.controller';
 import { AuthService } from './services/auth.service';
+import { UsersController } from './controllers/users.controller';
 
 @Module({
   imports: [
@@ -23,9 +25,10 @@ import { AuthService } from './services/auth.service';
     LibraryModule,
     SampleModule,
     CustomerModule,
+    UserModule,
     RbacModule
   ],
-  controllers: [IndexController, CustomersController],
+  controllers: [IndexController, CustomersController, UsersController],
   providers: [AuthService],
 })
 export class PartnerPortalModule { }
