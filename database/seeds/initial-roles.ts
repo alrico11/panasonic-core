@@ -5,76 +5,76 @@ export async function seed(knex: Knex): Promise<void> {
     // await knex("table_name").del();
 
     // Inserts seed entries
-    let insertModules = await knex("modules").insert([
+    let insertModules = await knex("Modules").insert([
         {
             slug: 'user',
-            module_name: 'User',
+            moduleName: 'User',
             description: 'User Management ',
             // order: '',
             // permissions: '',
-            // permissions_hash: '',
+            // permissionsHash: '',
             // menus: '',
-            // menus_hash: '',
-            is_active: true,
+            // menusHash: '',
+            isActive: true,
         },
         {
             slug: 'role',
-            module_name: 'Role',
+            moduleName: 'Role',
             description: 'Role User Management ',
             // order: '',
             // permissions: '',
-            // permissions_hash: '',
+            // permissionsHash: '',
             // menus: '',
-            // menus_hash: '',
-            is_active: true,
+            // menusHash: '',
+            isActive: true,
         },
         {
             slug: 'customer',
-            module_name: 'Customer',
+            moduleName: 'Customer',
             description: 'Manage customers',
             // order: '',
             // permissions: '',
-            // permissions_hash: '',
+            // permissionsHash: '',
             // menus: '',
-            // menus_hash: '',
-            is_active: true,
+            // menusHash: '',
+            isActive: true,
         },
         {
             slug: 'profile',
-            module_name: 'Profile',
+            moduleName: 'Profile',
             description: 'Manage own profile',
             // order: '',
             // permissions: '',
-            // permissions_hash: '',
+            // permissionsHash: '',
             // menus: '',
-            // menus_hash: '',
-            is_active: true,
+            // menusHash: '',
+            isActive: true,
         },
         {
             slug: 'customer_portal',
-            module_name: 'Customer Portal',
+            moduleName: 'Customer Portal',
             description: 'Customer portal dashboard',
             // order: '',
             // permissions: '',
-            // permissions_hash: '',
+            // permissionsHash: '',
             // menus: '',
-            // menus_hash: '',
-            is_active: true,
+            // menusHash: '',
+            isActive: true,
         }
     ])
         .onConflict('slug').ignore().returning('*')
 
     if (insertModules.length == 0) {
-        insertModules = await knex('modules').select('*')
+        insertModules = await knex('Modules').select('*')
     }
 
     const modules = Object.fromEntries(insertModules.map(v => [v.slug, v.id]))
 
-    let insertPermissions = await knex("permissions").insert([
+    let insertPermissions = await knex("Permissions").insert([
         // Profile
         {
-            module_id: modules.profile,
-            // module_name: '',
+            moduleId: modules.profile,
+            // moduleName: '',
             slug: 'view',
             name: 'View',
             // path: '',
@@ -83,8 +83,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.profile,
-            // module_name: '',
+            moduleId: modules.profile,
+            // moduleName: '',
             slug: 'edit',
             name: 'Edit',
             // path: '',
@@ -95,8 +95,8 @@ export async function seed(knex: Knex): Promise<void> {
 
         // Customer
         {
-            module_id: modules.customer,
-            // module_name: '',
+            moduleId: modules.customer,
+            // moduleName: '',
             slug: 'create',
             name: 'Create',
             // path: '',
@@ -105,8 +105,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.customer,
-            // module_name: '',
+            moduleId: modules.customer,
+            // moduleName: '',
             slug: 'edit',
             name: 'Edit',
             // path: '',
@@ -115,8 +115,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.customer,
-            // module_name: '',
+            moduleId: modules.customer,
+            // moduleName: '',
             slug: 'detail',
             name: 'Detail',
             // path: '',
@@ -125,8 +125,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.customer,
-            // module_name: '',
+            moduleId: modules.customer,
+            // moduleName: '',
             slug: 'delete',
             name: 'Delete',
             // path: '',
@@ -135,8 +135,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.customer,
-            // module_name: '',
+            moduleId: modules.customer,
+            // moduleName: '',
             slug: 'search',
             name: 'Search',
             // path: '',
@@ -145,8 +145,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.customer,
-            // module_name: '',
+            moduleId: modules.customer,
+            // moduleName: '',
             slug: 'filter',
             name: 'Filter',
             // path: '',
@@ -157,8 +157,8 @@ export async function seed(knex: Knex): Promise<void> {
 
         // User
         {
-            module_id: modules.user,
-            // module_name: '',
+            moduleId: modules.user,
+            // moduleName: '',
             slug: 'create',
             name: 'Create',
             // path: '',
@@ -167,8 +167,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.user,
-            // module_name: '',
+            moduleId: modules.user,
+            // moduleName: '',
             slug: 'edit',
             name: 'Edit',
             // path: '',
@@ -177,8 +177,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.user,
-            // module_name: '',
+            moduleId: modules.user,
+            // moduleName: '',
             slug: 'detail',
             name: 'Detail',
             // path: '',
@@ -187,8 +187,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.user,
-            // module_name: '',
+            moduleId: modules.user,
+            // moduleName: '',
             slug: 'delete',
             name: 'Delete',
             // path: '',
@@ -197,8 +197,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.user,
-            // module_name: '',
+            moduleId: modules.user,
+            // moduleName: '',
             slug: 'search',
             name: 'Search',
             // path: '',
@@ -207,8 +207,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.user,
-            // module_name: '',
+            moduleId: modules.user,
+            // moduleName: '',
             slug: 'filter',
             name: 'Filter',
             // path: '',
@@ -218,8 +218,8 @@ export async function seed(knex: Knex): Promise<void> {
         },
         // Role
         {
-            module_id: modules.role,
-            // module_name: '',
+            moduleId: modules.role,
+            // moduleName: '',
             slug: 'create',
             name: 'Create',
             // path: '',
@@ -228,8 +228,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.role,
-            // module_name: '',
+            moduleId: modules.role,
+            // moduleName: '',
             slug: 'edit',
             name: 'Edit',
             // path: '',
@@ -238,8 +238,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.role,
-            // module_name: '',
+            moduleId: modules.role,
+            // moduleName: '',
             slug: 'detail',
             name: 'Detail',
             // path: '',
@@ -248,8 +248,8 @@ export async function seed(knex: Knex): Promise<void> {
             // tMenus: '',
         },
         {
-            module_id: modules.role,
-            // module_name: '',
+            moduleId: modules.role,
+            // moduleName: '',
             slug: 'delete',
             name: 'Delete',
             // path: '',
@@ -260,8 +260,8 @@ export async function seed(knex: Knex): Promise<void> {
             // Customer portal
         },
         {
-            module_id: modules.customer_portal,
-            // module_name: '',
+            moduleId: modules.customer_portal,
+            // moduleName: '',
             slug: 'all',
             name: 'Allow all customer portal features',
             // path: '',
@@ -300,15 +300,15 @@ export async function seed(knex: Knex): Promise<void> {
         // 8.7.7 Logout	Logout
 
 
-    ]).onConflict(['module_id', 'slug']).ignore().returning('*')
+    ]).onConflict(['moduleId', 'slug']).ignore().returning('*')
 
     if (insertPermissions.length == 0) {
-        insertPermissions = await knex('permissions').select('*')
+        insertPermissions = await knex('Permissions').select('*')
     }
     const P = Object.fromEntries(
-        Object.entries(modules).map(([moduleSlug, module_id]) => [
+        Object.entries(modules).map(([moduleSlug, moduleId]) => [
             moduleSlug,
-            Object.fromEntries(insertPermissions.filter(v => v.module_id == module_id).map(
+            Object.fromEntries(insertPermissions.filter(v => v.moduleId == moduleId).map(
                 p => [p.slug, p.id]
             ))
         ])
@@ -355,17 +355,17 @@ export async function seed(knex: Knex): Promise<void> {
         // P.role.detail,
         // P.role.delete,
     ]
-    const minimumPemissions = [
+    const minimumPermissions = [
         P.profile.view,
         P.profile.edit,
     ]
-    const roles = await knex("roles").insert([
+    const roles = await knex("Roles").insert([
         {
             slug: 'super-admin',
             name: 'Super admin',
             description: 'Roles for Super admin',
-            // is_admin: '',
-            // is_area: '',
+            // isAdmin: '',
+            // isArea: '',
             permissions: allPemissions,
             // status: '',
         },
@@ -373,17 +373,17 @@ export async function seed(knex: Knex): Promise<void> {
             slug: 'pmi',
             name: 'PMI',
             description: 'Roles for PMI',
-            // is_admin: '',
-            // is_area: '',
-            permissions: minimumPemissions,
+            // isAdmin: '',
+            // isArea: '',
+            permissions: minimumPermissions,
             // status: '',
         },
         {
             slug: 'pgi-ho-engineering',
             name: 'PGI HO Engineering',
             description: 'Roles for PGI HO Engineering',
-            // is_admin: '',
-            // is_area: '',
+            // isAdmin: '',
+            // isArea: '',
             permissions: setAPemissions,
             // status: '',
         },
@@ -391,8 +391,8 @@ export async function seed(knex: Knex): Promise<void> {
             slug: 'pgi-ho-cs',
             name: 'PGI HO CS',
             description: 'Roles for PGI HO CS',
-            // is_admin: '',
-            // is_area: '',
+            // isAdmin: '',
+            // isArea: '',
             permissions: setAPemissions,
             // status: '',
         },
@@ -400,8 +400,8 @@ export async function seed(knex: Knex): Promise<void> {
             slug: 'gdn-ho',
             name: 'GDN HO',
             description: 'Roles for GDN HO',
-            // is_admin: '',
-            // is_area: '',
+            // isAdmin: '',
+            // isArea: '',
             permissions: setAPemissions,
             // status: '',
         },
@@ -409,44 +409,44 @@ export async function seed(knex: Knex): Promise<void> {
             slug: 'gdn-sc',
             name: 'GDN SC',
             description: 'Roles for GDN SC',
-            // is_admin: '',
-            // is_area: '',
-            permissions: minimumPemissions,
+            // isAdmin: '',
+            // isArea: '',
+            permissions: minimumPermissions,
             // status: '',
         },
         {
             slug: 'ccc',
             name: 'CCC',
             description: 'Roles for CCC',
-            // is_admin: '',
-            // is_area: '',
-            permissions: minimumPemissions,
+            // isAdmin: '',
+            // isArea: '',
+            permissions: minimumPermissions,
             // status: '',
         },
         {
             slug: 'dealer',
             name: 'Dealer',
             description: 'Roles for Dealer',
-            // is_admin: '',
-            // is_area: '',
-            permissions: minimumPemissions,
+            // isAdmin: '',
+            // isArea: '',
+            permissions: minimumPermissions,
             // status: '',
         },
         {
             slug: 'technis-gdn',
             name: 'Technis GDN',
             description: 'Roles for Technis GDN',
-            // is_admin: '',
-            // is_area: '',
-            permissions: minimumPemissions,
+            // isAdmin: '',
+            // isArea: '',
+            permissions: minimumPermissions,
             // status: '',
         },
         {
             slug: 'pass',
             name: 'PASS',
             description: 'Roles for PASS',
-            // is_admin: '',
-            // is_area: '',
+            // isAdmin: '',
+            // isArea: '',
             permissions: setAPemissions,
             // status: '',
         },
@@ -454,18 +454,18 @@ export async function seed(knex: Knex): Promise<void> {
             slug: 'technisi-pass',
             name: 'Technisi PASS',
             description: 'Roles for Technisi',
-            // is_admin: '',
-            // is_area: '',
-            permissions: minimumPemissions,
+            // isAdmin: '',
+            // isArea: '',
+            permissions: minimumPermissions,
             // status: '',
         },
         {
             slug: 'customer',
             name: 'Customer',
             description: 'Roles for Customer',
-            // is_admin: '',
-            // is_area: '',
-            permissions: [...minimumPemissions, P.customer_portal.all],
+            // isAdmin: '',
+            // isArea: '',
+            permissions: [...minimumPermissions, P.customer_portal.all],
             // status: '',
         }
     ]).onConflict('slug').ignore().returning('*')
