@@ -1,5 +1,9 @@
-import "dotenv/config"
+import * as dotenv from "dotenv"
 import type { Knex } from "knex";
+
+dotenv.config({
+  path: [ '.env.local', '.env.customer-portal.local', '.env.customer-portal']
+})
 
 const config: Knex.Config = {
   client: 'pg',
