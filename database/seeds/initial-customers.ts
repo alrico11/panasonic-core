@@ -1,5 +1,6 @@
-import { enums } from "@lib";
 import { Knex } from "knex";
+import { constants, enums } from "@lib";
+const { TableName } = constants
 
 const { MembershipTypeEnum } = enums
 export async function seed(knex: Knex): Promise<void> {
@@ -259,5 +260,5 @@ export async function seed(knex: Knex): Promise<void> {
 		},
 	];
 
-	await knex('customers').insert(customers);
+	await knex(TableName.Customers).insert(customers);
 }
