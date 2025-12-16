@@ -76,7 +76,7 @@ export async function up(knex: Knex): Promise<void> {
     // Roles
     await knex.schema.createTable("roles", (table) => {
         table.increments("id").primary().comment("PK");
-        table.string("slug");
+        table.string("slug").unique();
         table.string("name").comment("RoleEnum");
         table.text("description");
         table.boolean("is_admin").defaultTo(false).comment("allow access all territories");
@@ -102,7 +102,7 @@ export async function up(knex: Knex): Promise<void> {
     // Modules
     await knex.schema.createTable("modules", (table) => {
         table.increments("id").primary().comment("PK");
-        table.string("slug").comment("eg: reports.invoices");
+        table.string("slug").unique().comment("eg: reports.invoices");
         table.string("module_name").comment("eg: Report Invoices");
         table.text("description").comment("module for report invoices");
         table.integer("order").comment("sort list module on role management");
@@ -124,6 +124,8 @@ export async function up(knex: Knex): Promise<void> {
         table.string("method").comment("GET, POST, PATCH, DELETE");
         table.specificType("deps", "text[]").comment("this store dependency permission to access. eg: [customer.list, customer.get]");
         table.specificType("tMenus", "text[]").comment("list menu thats affected. eg: [b.customer.fraud.delete]");
+        // composite unique
+        table.unique(['module_id', 'slug'])
     });
 
     // Customers

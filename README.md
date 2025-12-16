@@ -15,7 +15,9 @@ openssl ec -in key_private.pem -pubout -out key_public.pem
 
 ### Setup Development
 
-Copy and modify `.env.example` to `.env`
+Copy and modify `.env.example.customer-portal` to `.env.customer-portal.local`
+Copy and modify `.env.example.partner-portal` to `.env.partner-portal.local`
+
 
 
 ``` sh
@@ -50,6 +52,16 @@ npx nest generate library my-library
 npm run migrate:make -- create-table-user
 ```
 
+## Create Seeds
+
+``` sh
+# Create new seed data
+npx knex seed:make initial-roles
+# Running seeds
+npx knex seed:run --specific=initial-roles.ts
+npx knex seed:run --specific=initial-customers.ts
+
+```
 
 ## Troubleshoot
 
