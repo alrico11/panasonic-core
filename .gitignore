@@ -4,6 +4,10 @@ dist/
 
 # Environment files
 .env
+.env.customer-portal
+.env.partner-portal
+.env.technician-portal
+
 /*.local
 
 # IDE
