@@ -4,7 +4,6 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthenticationModule, CustomerModule, LibraryModule, DatabaseModule, SampleModule, AccessTokenGuard, RbacModule } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomerController } from './controllers/customer.controller';
-import { CustomersController } from './controllers/customers.controller';
 
 @Module({
   imports: [
@@ -19,7 +18,7 @@ import { CustomersController } from './controllers/customers.controller';
     CustomerModule,
     RbacModule
   ],
-  controllers: [IndexController, CustomerController, CustomersController],
+  controllers: [IndexController, CustomerController],
   providers: [
     {
       // Use auth guard for all controller, except it has @NoLogin decorator

@@ -1,5 +1,9 @@
 # Cakrawala Hub Core API
 
+OpenAPI (Swagger) enabled in non-production mode, can be accessed at:
+
+- http://localhost:4001/docs
+- See in logs to get default creds.
 
 
 ## Getting started

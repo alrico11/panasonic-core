@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { PartnerPortalController } from './partner-portal.controller';
-import { PartnerPortalService } from './partner-portal.service';
-import { LibraryModule } from '@lib';
+import { AuthenticationModule, CustomerModule, LibraryModule, RbacModule } from '@lib';
 import { DatabaseModule } from '@lib';
 import { SampleModule } from '@lib';
+import { IndexController } from './controllers/index.controller';
+import { CustomersController } from './controllers/customers.controller';
 
 @Module({
   imports: [
@@ -12,11 +12,13 @@ import { SampleModule } from '@lib';
       isGlobal: true,
       envFilePath: ['.env.partner-portal.local', '.env.partner-portal']
     }),
+    AuthenticationModule,
     DatabaseModule,
+    CustomerModule,
     LibraryModule,
-    SampleModule
+    RbacModule
   ],
-  controllers: [PartnerPortalController],
-  providers: [PartnerPortalService],
+  controllers: [IndexController, CustomersController],
+  providers: [],
 })
 export class PartnerPortalModule { }

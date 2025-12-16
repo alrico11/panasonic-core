@@ -6,8 +6,8 @@ import * as expressBasicAuth from 'express-basic-auth';
 
 function setupOpenApi(app: INestApplication) {
   const creds = process.env['APIDOCS_CREDS'] ?? 'ApiDocsSecret'
-  const apiDocsPrefix = process.env['APIDOCS_PREFIX'] ?? '/api-docs'
-  Logger.debug(`Setup OpenApi on ${apiDocsPrefix} with creds ${creds}`, 'SetupOpenApi')
+  const apiDocsPrefix = process.env['APIDOCS_PREFIX'] ?? '/docs'
+  Logger.debug(`Setup OpenApi on ${apiDocsPrefix} with creds u: ${creds}, p: ${creds}`, 'SetupOpenApi')
   const config = new DocumentBuilder()
     .setTitle('Customer Portal API')
     .setDescription('Customer Portal API description')
