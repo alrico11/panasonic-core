@@ -1,7 +1,10 @@
 import type { Knex } from "knex";
+import { constants } from "@lib";
+const { TableName } = constants
+
 export async function up(knex: Knex): Promise<void> {
     // Users table
-    await knex.schema.createTable("users", (table) => {
+    await knex.schema.createTable(TableName.Users, (table) => {
         table.increments("id").primary().comment("PK")
         table.integer("role_id").comment("roles.id (FK reference, constraint not enforced)")
         table.integer("transcxp_id").comment("user123 (FK reference)")
@@ -30,7 +33,7 @@ export async function up(knex: Knex): Promise<void> {
     })
 
     // User addresses (named as in the spec: user_adresses)
-    await knex.schema.createTable("user_adresses", (table) => {
+    await knex.schema.createTable(TableName.UserAdresses, (table) => {
         table.increments("id").primary().comment("PK");
         table.integer("user_id").comment("users.id (FK reference)");
         table.string("address_type").comment("AddressTypeEnum");
@@ -43,7 +46,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Partners
-    await knex.schema.createTable("partners", (table) => {
+    await knex.schema.createTable(TableName.Partners, (table) => {
         table.increments("id").primary().comment("PK");
         table.integer("user_id").comment("users.id (FK reference)");
         table.string("password");
@@ -57,7 +60,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Technicians
-    await knex.schema.createTable("technicians", (table) => {
+    await knex.schema.createTable(TableName.Technicians, (table) => {
         table.increments("id").primary().comment("PK");
         table.integer("user_id").comment("users.id (FK reference)");
         table.string("nsc").comment("NSCEnum");
@@ -74,7 +77,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Roles
-    await knex.schema.createTable("roles", (table) => {
+    await knex.schema.createTable(TableName.Roles, (table) => {
         table.increments("id").primary().comment("PK");
         table.string("slug").unique();
         table.string("name").comment("RoleEnum");
@@ -86,7 +89,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Menus
-    await knex.schema.createTable("menus", (table) => {
+    await knex.schema.createTable(TableName.Menus, (table) => {
         table.increments("id").primary().comment("PK");
         table.integer("module_id");
         table.string("group").comment("fitur group. eg: Reports");
@@ -100,7 +103,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Modules
-    await knex.schema.createTable("modules", (table) => {
+    await knex.schema.createTable(TableName.Modules, (table) => {
         table.increments("id").primary().comment("PK");
         table.string("slug").unique().comment("eg: reports.invoices");
         table.string("module_name").comment("eg: Report Invoices");
@@ -114,7 +117,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Permissions
-    await knex.schema.createTable("permissions", (table) => {
+    await knex.schema.createTable(TableName.Permissions, (table) => {
         table.increments("id").primary().comment("PK");
         table.integer("module_id").comment("modules.id");
         table.string("module_name");
@@ -129,7 +132,7 @@ export async function up(knex: Knex): Promise<void> {
     });
 
     // Customers
-    await knex.schema.createTable("customers", (table) => {
+    await knex.schema.createTable(TableName.Customers, (table) => {
         table.increments("id").primary().comment("PK");
         table.string("old_customer_id").comment("for migration data prevent loss data");
         table.integer("user_id")
@@ -161,13 +164,13 @@ export async function up(knex: Knex): Promise<void> {
 
 export async function down(knex: Knex): Promise<void> {
     // Drop in reverse order of creation
-    await knex.schema.dropTableIfExists("customers");
-    await knex.schema.dropTableIfExists("permissions");
-    await knex.schema.dropTableIfExists("modules");
-    await knex.schema.dropTableIfExists("menus");
-    await knex.schema.dropTableIfExists("roles");
-    await knex.schema.dropTableIfExists("technicians");
-    await knex.schema.dropTableIfExists("partners");
-    await knex.schema.dropTableIfExists("user_adresses");
-    await knex.schema.dropTableIfExists("users");
+    await knex.schema.dropTableIfExists(TableName.Customers);
+    await knex.schema.dropTableIfExists(TableName.Permissions);
+    await knex.schema.dropTableIfExists(TableName.Modules);
+    await knex.schema.dropTableIfExists(TableName.Menus);
+    await knex.schema.dropTableIfExists(TableName.Roles);
+    await knex.schema.dropTableIfExists(TableName.Technicians);
+    await knex.schema.dropTableIfExists(TableName.Partners);
+    await knex.schema.dropTableIfExists(TableName.UserAdresses);
+    await knex.schema.dropTableIfExists(TableName.Users);
 }

@@ -1,11 +1,13 @@
 import { Knex } from "knex";
+import { constants } from "@lib";
+const { TableName } = constants
 
 export async function seed(knex: Knex): Promise<void> {
     // Deletes ALL existing entries
-    // await knex("table_name").del();
+    // await knex(TableName.Table_name).del();
 
     // Inserts seed entries
-    let insertModules = await knex("modules").insert([
+    let insertModules = await knex(TableName.Modules).insert([
         {
             slug: 'user',
             module_name: 'User',
@@ -65,12 +67,12 @@ export async function seed(knex: Knex): Promise<void> {
         .onConflict('slug').ignore().returning('*')
 
     if (insertModules.length == 0) {
-        insertModules = await knex('modules').select('*')
+        insertModules = await knex(TableName.Modules).select('*')
     }
 
     const modules = Object.fromEntries(insertModules.map(v => [v.slug, v.id]))
 
-    let insertPermissions = await knex("permissions").insert([
+    let insertPermissions = await knex(TableName.Permissions).insert([
         // Profile
         {
             module_id: modules.profile,
@@ -303,7 +305,7 @@ export async function seed(knex: Knex): Promise<void> {
     ]).onConflict(['module_id', 'slug']).ignore().returning('*')
 
     if (insertPermissions.length == 0) {
-        insertPermissions = await knex('permissions').select('*')
+        insertPermissions = await knex(TableName.Permissions).select('*')
     }
     const P = Object.fromEntries(
         Object.entries(modules).map(([moduleSlug, module_id]) => [
@@ -359,7 +361,7 @@ export async function seed(knex: Knex): Promise<void> {
         P.profile.view,
         P.profile.edit,
     ]
-    const roles = await knex("roles").insert([
+    const roles = await knex(TableName.Roles).insert([
         {
             slug: 'super-admin',
             name: 'Super admin',
