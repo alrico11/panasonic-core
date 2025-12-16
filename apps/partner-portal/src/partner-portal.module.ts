@@ -6,10 +6,12 @@ import {
   DatabaseModule,
   LibraryModule,
   RbacModule,
-  SampleModule
+  SampleModule,
+  UserModule
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomersController } from './controllers/customers.controller';
+import { UsersController } from './controllers/users.controller';
 
 @Module({
   imports: [
@@ -22,9 +24,10 @@ import { CustomersController } from './controllers/customers.controller';
     LibraryModule,
     SampleModule,
     CustomerModule,
+    UserModule,
     RbacModule
   ],
-  controllers: [IndexController, CustomersController],
+  controllers: [IndexController, CustomersController, UsersController],
   providers: [],
 })
 export class PartnerPortalModule { }

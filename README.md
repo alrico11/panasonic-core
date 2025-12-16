@@ -26,7 +26,7 @@ Copy and modify `.env.example` to `.env.local`
 # Install NPM Dependencies
 npm ci
 
-# Start Customer Portal API
+# Start Portal API
 npm run start:dev -- customer-portal
 npm run start:dev -- partner-portal
 npm run start:dev -- technician-portal
