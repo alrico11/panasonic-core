@@ -11,6 +11,7 @@ export async function seed(knex: Knex): Promise<void> {
         const email = 'ps-adm-dev@vomoto.com'
         const user = await UserModel.query(trx).insert({
             roleId: role.id,
+            email,
             accountName: 'Super Admin',
             firstName: 'Super',
             // middleName: '',
