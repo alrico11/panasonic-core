@@ -1,7 +1,7 @@
 import { APP_GUARD } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthenticationModule, CustomerModule, LibraryModule, DatabaseModule, SampleModule, AccessTokenGuard } from '@lib';
+import { AuthenticationModule, CustomerModule, LibraryModule, DatabaseModule, SampleModule, AccessTokenGuard, RbacModule } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomerController } from './controllers/customer.controller';
 import { CustomersController } from './controllers/customers.controller';
@@ -16,7 +16,8 @@ import { CustomersController } from './controllers/customers.controller';
     DatabaseModule,
     LibraryModule,
     SampleModule,
-    CustomerModule
+    CustomerModule,
+    RbacModule
   ],
   controllers: [IndexController, CustomerController, CustomersController],
   providers: [
