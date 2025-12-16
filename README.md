@@ -19,9 +19,7 @@ openssl ec -in key_private.pem -pubout -out key_public.pem
 
 ### Setup Development
 
-Copy and modify `.env.example.customer-portal` to `.env.customer-portal.local`
-Copy and modify `.env.example.partner-portal` to `.env.partner-portal.local`
-
+Copy and modify `.env.example` to `.env.local`
 
 
 ``` sh

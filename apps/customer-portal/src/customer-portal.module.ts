@@ -9,7 +9,7 @@ import { CustomerController } from './controllers/customer.controller';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.customer-portal.local', '.env.customer-portal']
+      envFilePath: ['.env.local', '.env.customer-portal']
     }),
     AuthenticationModule,
     DatabaseModule,
