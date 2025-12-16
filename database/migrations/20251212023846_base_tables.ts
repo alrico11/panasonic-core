@@ -159,6 +159,13 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("byFacebookMessenger").defaultTo(false);
         table.boolean("bySms").defaultTo(false);
         table.boolean("byTelephone").defaultTo(false);
+        table.timestamp("createdAt").defaultTo(knex.fn.now())
+        table.timestamp("updatedAt")
+        table.timestamp("deletedAt")
+        table.integer("createdBy").comment("Users.id (FK reference)")
+        table.integer("updatedBy").comment("Users.id (FK reference)")
+        table.integer("deletedBy").comment("Users.id (FK reference)")
+        table.string("profilePicture").nullable().comment("link to profile picture");
     });
 
 }
