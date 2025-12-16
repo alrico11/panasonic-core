@@ -147,7 +147,7 @@ export async function up(knex: Knex): Promise<void> {
         table.boolean("multiFactorAuthentication").defaultTo(false);
         table.integer("otpCodeAttempt");
         table.string("otpCode").comment("redis?");
-        table.string("qrOtpCode").comment("redis?");
+        table.boolean("qrOtpCode").comment("redis?");
         table.timestamp("otpExpiredAt").nullable();
         table.boolean("isOtpUsed").defaultTo(false);
         table.integer("loginAttempts").comment("redis?");
