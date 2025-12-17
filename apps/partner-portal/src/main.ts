@@ -46,7 +46,7 @@ async function bootstrap() {
     instance.set('json spaces', 2)
   }
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true,  whitelist: true, forbidNonWhitelisted: true, skipMissingProperties: false}));
   app.enableCors({
     origin: process.env.FE_URL,
     credentials: true,
