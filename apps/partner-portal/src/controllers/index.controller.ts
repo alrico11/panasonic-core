@@ -57,7 +57,7 @@ export class IndexController {
         description: "Do login using email and password"
     })
     login(@Body() payload: LoginDto, @Res({ passthrough: true }) res: Response) {
-        return this.authService.login(payload.email, payload.password).then(
+        return this.authService.login(payload.email, payload.password, payload.remember).then(
             ({ token, user, partnerUser, expiresIn }) => {
                 res.cookie('token', token, {
                     httpOnly: true,

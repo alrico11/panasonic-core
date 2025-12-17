@@ -2,7 +2,9 @@ import { Transform } from 'class-transformer';
 import {
   MaxLength,
   IsEmail,
-  IsString
+  IsString,
+  IsOptional,
+  IsBooleanString
 } from 'class-validator';
 
 
@@ -16,4 +18,8 @@ export class LoginDto {
   @MaxLength(500)
   @IsString()
   password: string
+
+  @IsOptional()
+  @Transform(v => String(v.value || '').toLowerCase() === 'true')
+  remember?: boolean
 }
