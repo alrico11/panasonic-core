@@ -1,5 +1,6 @@
-import { Action, CustomerService, CreateCustomerDto, UpdateCustomerDto } from '@lib';
-import { Controller, Get, Post, Body, Patch, Delete, Param, Query } from '@nestjs/common';
+import { Action, CustomerService, CreateCustomerDto, UpdateCustomerDto, NoLogin } from '@lib';
+import { Controller, Get, Post, Body, Patch, Delete, Param, Query, ParseIntPipe, Req } from '@nestjs/common';
+import { Request } from 'express'
 
 @Controller('customers')
 export class CustomersController {
@@ -10,14 +11,10 @@ export class CustomersController {
      * GET /customers
      */
     @Get()
-    @Action('list', 'customer')
-    async listAllCustomers() {
-        const customers = await this.customerService.listAllCustomers();
-        return {
-            success: true,
-            message: 'Customers fetched successfully',
-            data: customers,
-        };
+    // @Action('list', 'customer')
+    @NoLogin()
+    listAllCustomers(req: Request) {
+        return this.customerService.listAllCustomers();
     }
 
 
@@ -26,14 +23,10 @@ export class CustomersController {
      * GET /customers/:id
      */
     @Get(':id')
-    @Action('detail', 'customer')
-    async findOne(@Param('id') id: string) {
-        const customer = await this.customerService.findCustomerById(Number(id));
-        return {
-            success: true,
-            message: 'Customer fetched successfully',
-            data: customer,
-        };
+    @NoLogin()
+    // @Action('detail', 'customer')
+    findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+       return this.customerService.findCustomerById(id)
     }
 
     /**
@@ -41,14 +34,10 @@ export class CustomersController {
      * POST /customers
      */
     @Post()
-    @Action('create', 'customer')
-    async create(@Body() createCustomerDto: CreateCustomerDto) {
-        const customer = await this.customerService.createCustomer(createCustomerDto);
-        return {
-            success: true,
-            message: 'Customer created successfully',
-            data: customer,
-        };
+    @NoLogin()
+    // @Action('create', 'customer')
+    create(@Req() req: Request, @Body() createCustomerDto: CreateCustomerDto) {
+        return this.customerService.createCustomer(createCustomerDto);
     }
 
     /**
@@ -56,17 +45,14 @@ export class CustomersController {
      * PATCH /customers/:id
      */
     @Patch(':id')
-    @Action('edit', 'customer')
-    async update(
-        @Param('id') id: string,
+    @NoLogin()
+    // @Action('edit', 'customer')
+    update(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateCustomerDto: UpdateCustomerDto,
     ) {
-        const customer = await this.customerService.updateCustomer(Number(id), updateCustomerDto);
-        return {
-            success: true,
-            message: 'Customer updated successfully',
-            data: customer,
-        };
+        return this.customerService.updateCustomer(id, updateCustomerDto);
     }
 
     /**
@@ -74,13 +60,9 @@ export class CustomersController {
      * DELETE /customers/:id
      */
     @Delete(':id')
-    @Action('delete', 'customer')
-    async remove(@Param('id') id: string) {
-        const result = await this.customerService.deleteCustomer(Number(id));
-        return {
-            success: true,
-            message: result.message,
-            data: result,
-        };
+    @NoLogin()
+    // @Action('delete', 'customer')
+    remove(@Param('id', ParseIntPipe) id: number) {
+        return this.customerService.deleteCustomer(id);
     }
 }
