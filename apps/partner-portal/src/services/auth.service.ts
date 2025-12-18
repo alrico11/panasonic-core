@@ -11,7 +11,9 @@ export class AuthService {
 
     async login(email: string, password: string, remember?: boolean) {
         // Find user by email
-        const user = await UserModel.query().where({ email }).first()
+        const user = await UserModel.query().where({ email })
+            .withGraphFetched('role')
+            .first()
 
         if (!user) {
             this.logger.warn(`User with email "${email}" not found`)
@@ -29,6 +31,12 @@ export class AuthService {
             this.logger.log('Invalid password')
             throw new UnauthorizedException('Invalid email or password')
         }
+
+        if (!this.authenticationService.isThisRoleAllowedToLoginApp(user.role?.slug, TokenApp.PARTNER)) {
+            this.logger.log(`Partner with email "${email}" and userId ${user.id} with role ${user.role?.slug} is not allowed to login in Partner Portal`)
+            throw new UnauthorizedException('Invalid email or password')
+        }
+
         const expiresIn = remember ? this.authenticationService.rembemberMeExpiresIn : this.authenticationService.expiresIn
         const token = this.authenticationService.generateToken(user.id, TokenApp.PARTNER, expiresIn);
         this.logger.log(`User logged in: userId ${user.id} (${user.email}) partnerId ${partnerUser.id}`)

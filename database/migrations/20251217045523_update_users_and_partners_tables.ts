@@ -1,5 +1,6 @@
-import { TableName } from "@lib/constants";
 import type { Knex } from "knex";
+import { constants } from "@lib";
+const { TableName } = constants
 
 export async function up(knex: Knex): Promise<void> {
   // Modify Users table: change status from string to boolean
