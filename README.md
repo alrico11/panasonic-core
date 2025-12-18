@@ -26,6 +26,13 @@ Copy and modify `.env.example` to `.env.local`
 # Install NPM Dependencies
 npm ci
 
+# Setup Database structure
+npm run migrate:latest
+# Setup Database initial data
+npx knex seed:run --specific=initial-roles.ts
+npx knex seed:run --specific=initial-customers.ts
+npx knex seed:run --specific=partner-portal-user.ts
+
 # Start Portal API
 npm run start:dev -- customer-portal
 npm run start:dev -- partner-portal
