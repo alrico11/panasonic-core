@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { TechnicianPortalModule } from './technician-portal.module';
-import { Logger, type INestApplication } from '@nestjs/common';
+import { Logger, type INestApplication, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
+import { CoreInterceptor, ExceptionHandler } from '@lib';
+import { HttpAdapterHost } from '@nestjs/core';
 
 function setupOpenApi(app: INestApplication) {
   const creds = process.env['APIDOCS_CREDS'] ?? 'ApiDocsSecret'
@@ -27,6 +29,9 @@ function setupOpenApi(app: INestApplication) {
 }
 
 async function bootstrap() {
+  // Set APP_NAME for interceptor (can be overridden by environment variable)
+  process.env.APP_NAME = process.env.APP_NAME || 'technician-portal';
+  
   const app = await NestFactory.create(TechnicianPortalModule);
   const port = process.env.PORT || 4003;
 
@@ -36,6 +41,9 @@ async function bootstrap() {
     setupOpenApi(app)
   }
 
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true, forbidNonWhitelisted: true }));
+  app.useGlobalFilters(new ExceptionHandler(app.get(HttpAdapterHost)));
+  app.useGlobalInterceptors(new CoreInterceptor());
   app.enableCors({
     origin: process.env.FE_URL,
     credentials: true,

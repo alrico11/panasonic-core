@@ -5,6 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as expressBasicAuth from 'express-basic-auth';
 import type express from 'express';
 import { parse } from 'qs';
+import { CoreInterceptor, ExceptionHandler } from '@lib';
+import { HttpAdapterHost } from '@nestjs/core';
 
 function setupOpenApi(app: INestApplication) {
   const creds = process.env['APIDOCS_CREDS'] ?? 'ApiDocsSecret'
@@ -29,6 +31,9 @@ function setupOpenApi(app: INestApplication) {
 }
 
 async function bootstrap() {
+  // Set APP_NAME for interceptor (can be overridden by environment variable)
+  process.env.APP_NAME = process.env.APP_NAME || 'customer-portal';
+  
   const app = await NestFactory.create(CustomerPortalModule);
   const port = process.env.PORT || 4001;
 
@@ -46,7 +51,9 @@ async function bootstrap() {
     instance.set('json spaces', 2)
   }
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true,  whitelist: true, forbidNonWhitelisted: true}));
+  app.useGlobalFilters(new ExceptionHandler(app.get(HttpAdapterHost)));
+  app.useGlobalInterceptors(new CoreInterceptor());
   app.enableCors({
     origin: process.env.FE_URL,
     credentials: true,
