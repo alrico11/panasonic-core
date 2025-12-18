@@ -11,6 +11,7 @@ import {
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomersController } from './controllers/customers.controller';
+import { AuthService } from './services/auth.service';
 import { UsersController } from './controllers/users.controller';
 
 @Module({
@@ -28,6 +29,6 @@ import { UsersController } from './controllers/users.controller';
     RbacModule
   ],
   controllers: [IndexController, CustomersController, UsersController],
-  providers: [],
+  providers: [AuthService],
 })
 export class PartnerPortalModule { }
