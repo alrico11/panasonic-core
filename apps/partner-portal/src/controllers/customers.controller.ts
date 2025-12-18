@@ -1,4 +1,4 @@
-import { Action, CustomerService, CreateCustomerDto, UpdateCustomerDto, NoLogin } from '@lib';
+import { Action, CustomerService, CreateCustomerDto, UpdateCustomerDto, NoLogin, PaginationDto } from '@lib';
 import { Controller, Get, Post, Body, Patch, Delete, Param, Query, ParseIntPipe, Req } from '@nestjs/common';
 import { Request } from 'express'
 
@@ -13,8 +13,9 @@ export class CustomersController {
     @Get()
     // @Action('list', 'customer')
     @NoLogin()
-    listAllCustomers(req: Request) {
-        return this.customerService.listAllCustomers();
+    listAllCustomers(req: Request, @Query() paginationDto: PaginationDto) {
+        // return this.customerService.listAllCustomers(paginationDto, req.token);
+        return this.customerService.listAllCustomers(paginationDto);
     }
 
 
@@ -37,6 +38,7 @@ export class CustomersController {
     @NoLogin()
     // @Action('create', 'customer')
     create(@Req() req: Request, @Body() createCustomerDto: CreateCustomerDto) {
+        // return 'ok'
         return this.customerService.createCustomer(createCustomerDto);
     }
 
