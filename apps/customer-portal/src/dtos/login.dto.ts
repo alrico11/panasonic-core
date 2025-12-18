@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
   MaxLength,
@@ -14,11 +15,21 @@ export class LoginDto {
   @MaxLength(500)
   @IsString()
   @Transform(v => String(v.value || '').toLowerCase())
+  @ApiProperty({
+    description: 'Email address',
+    type: 'string',
+    // example: 'alice.smith@example.com'
+  })
   email?: string
 
   @IsOptional()
   @MaxLength(500)
   @IsString()
   @Transform(v => String(v.value || '').toLowerCase())
+  @ApiProperty({
+    description: 'Mobile phone number',
+    type: 'string',
+    example: '08111000001'
+  })
   phone?: string
 }

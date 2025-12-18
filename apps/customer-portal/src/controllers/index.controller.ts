@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
-import { LibraryService, NoLogin, PaginationDto, RbacService } from '@lib';
-import { ApiOperation } from '@nestjs/swagger';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { LibraryService, NoLogin } from '@lib';
+import { ApiBody, ApiOperation } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
-import { LoginDto } from 'apps/partner-portal/src/dtos/login.dto';
+import { LoginDto } from '../dtos/login.dto';
 import { AuthService } from '../services/auth.service';
+import { VerifyOtpDto } from '../dtos/verify-otp.dto';
 
 @Controller()
 export class IndexController {
@@ -64,17 +65,27 @@ export class IndexController {
     @ApiOperation({
         description: "Do login using email or phone number with OTP"
     })
+    @ApiBody({ type: LoginDto })
     login(@Body() payload: LoginDto, @Res({ passthrough: true }) res: Response) {
-        return this.authService.login(payload).then(
-            ({ token, user, customers, expiresIn }) => {
-                // res.cookie('token', token, {
-                //     httpOnly: true,
-                //     secure: process.env.NODE_ENV === 'production',
-                //     sameSite: 'lax',
-                //     path: '/',
-                //     maxAge: expiresIn
-                // })
-                // return { user, customers, expiresIn }
+        return this.authService.login(payload)
+    }
+
+    @Post('verify-otp')
+    @NoLogin()
+    @ApiOperation({
+        description: "Verify OTP to login"
+    })
+    verifyOtp(@Body() payload: VerifyOtpDto, @Res({ passthrough: true }) res: Response) {
+        return this.authService.verifyOtp(payload.userId, payload.code).then(
+            (ret) => {
+                res.cookie('token', ret.token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax',
+                    path: '/',
+                    maxAge: ret.expiresIn
+                })
+                return ret
             }
         )
     }

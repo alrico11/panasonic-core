@@ -5,7 +5,10 @@ const { TableName } = constants
 const { MembershipTypeEnum } = enums
 export async function seed(knex: Knex): Promise<void> {
 	// remove all existing entries
-	// await knex('Customers').del();
+	if (process.argv.includes('--clear')) {
+		console.warn('Clearing all customers')
+		await knex(TableName.Customers).del();
+	}
 
 	const customers = [
 		{
@@ -17,7 +20,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Alice',
 			middleName: 'M',
 			lastName: 'Smith',
-			mobilePhone: '+628111000001',
+			mobilePhone: '628111000001',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: true,
 			byPost: false,
@@ -35,7 +38,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Bob',
 			middleName: '',
 			lastName: 'Johnson',
-			mobilePhone: '+628111000002',
+			mobilePhone: '628111000002',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: false,
 			byPost: false,
@@ -53,7 +56,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Carol',
 			middleName: 'A',
 			lastName: 'Wu',
-			mobilePhone: '+628111000003',
+			mobilePhone: '628111000003',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: true,
 			byPost: true,
@@ -71,7 +74,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'David',
 			middleName: '',
 			lastName: 'Lee',
-			mobilePhone: '+628111000004',
+			mobilePhone: '628111000004',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: true,
 			byPost: false,
@@ -89,7 +92,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Emma',
 			middleName: 'R',
 			lastName: 'Khan',
-			mobilePhone: '+628111000005',
+			mobilePhone: '628111000005',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: false,
 			byPost: true,
@@ -107,7 +110,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Frank',
 			middleName: '',
 			lastName: 'Miller',
-			mobilePhone: '+628111000006',
+			mobilePhone: '628111000006',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: true,
 			byPost: false,
@@ -125,7 +128,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Gina',
 			middleName: 'L',
 			lastName: 'Patel',
-			mobilePhone: '+628111000007',
+			mobilePhone: '628111000007',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: false,
 			byPost: false,
@@ -143,7 +146,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Henry',
 			middleName: '',
 			lastName: 'Owen',
-			mobilePhone: '+628111000008',
+			mobilePhone: '628111000008',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: true,
 			byPost: false,
@@ -161,7 +164,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Irene',
 			middleName: 'S',
 			lastName: 'Lopez',
-			mobilePhone: '+628111000009',
+			mobilePhone: '628111000009',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: false,
 			byPost: false,
@@ -179,7 +182,7 @@ export async function seed(knex: Knex): Promise<void> {
 			firstName: 'Jack',
 			middleName: '',
 			lastName: 'Chen',
-			mobilePhone: '+628111000010',
+			mobilePhone: '628111000010',
 			membershipType: MembershipTypeEnum.Standard,
 			byEmail: false,
 			byPost: false,
