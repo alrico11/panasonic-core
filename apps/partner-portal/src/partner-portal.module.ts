@@ -5,6 +5,7 @@ import {
   CustomerModule,
   DatabaseModule,
   LibraryModule,
+  PartnerModule,
   RbacModule,
   SampleModule,
   UserModule
@@ -26,6 +27,7 @@ import { UsersController } from './controllers/users.controller';
     SampleModule,
     CustomerModule,
     UserModule,
+    PartnerModule,
     RbacModule
   ],
   controllers: [IndexController, CustomersController, UsersController],

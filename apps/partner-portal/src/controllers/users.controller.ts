@@ -1,151 +1,70 @@
-import { Action, UserService, CreateUserDto, UpdateUserDto } from '@lib';
-import { Controller, Get, Post, Body, Patch, Delete, Param, Query } from '@nestjs/common';
+import { Action, PartnerService, CreatePartnerDto, UpdatePartnerDto, NoLogin, PaginationDto } from '@lib';
+import { Controller, Get, Post, Body, Patch, Delete, Param, Query, ParseIntPipe, Req } from '@nestjs/common';
+import { Request } from 'express'
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UserService) {}
+    constructor(private readonly partnerService: PartnerService) {}
 
     /**
-     * Get all users
-     * GET /users
+     * Get all partners
+     * GET /partners
      */
     @Get()
-    @Action('search', 'user')
-    async listAllUsers() {
-        const users = await this.usersService.listAllUsers();
-        return {
-            success: true,
-            message: 'Users fetched successfully',
-            data: users,
-        };
+    // @Action('list', 'partner')
+    // @NoLogin()
+    listAllPartners(@Req() req: Request, @Query() paginationDto: PaginationDto) {
+        console.log('req.token: ', req.token)
+        return this.partnerService.listAllPartners(paginationDto, req.token);
     }
 
-    /**
-     * Get users with pagination
-     * GET /users/pagination?page=1&limit=10
-     */
-    @Get('pagination')
-    @Action('search', 'user')
-    async getPaginated(
-        @Query('page') page: number = 1,
-        @Query('limit') limit: number = 10,
-    ) {
-        const result = await this.usersService.getUsersWithPagination(page, limit);
-        return {
-            success: true,
-            message: 'Users fetched with pagination',
-            ...result,
-        };
-    }
 
     /**
-     * Search users by email
-     * GET /users/search/email?email=example
-     */
-    @Get('search/email')
-    @Action('search', 'user')
-    async searchByEmail(@Query('email') email: string) {
-        const users = await this.usersService.searchByEmail(email);
-        return {
-            success: true,
-            message: 'Users search by email completed',
-            data: users,
-        };
-    }
-
-    /**
-     * Search users by name
-     * GET /users/search/name?firstName=John&lastName=Doe
-     */
-    @Get('search/name')
-    @Action('search', 'user')
-    async searchByName(
-        @Query('firstName') firstName: string,
-        @Query('lastName') lastName?: string,
-    ) {
-        const users = await this.usersService.searchByName(firstName, lastName);
-        return {
-            success: true,
-            message: 'Users search by name completed',
-            data: users,
-        };
-    }
-
-    /**
-     * Get users by role ID
-     * GET /users/role/:roleId
-     */
-    @Get('role/:roleId')
-    @Action('search', 'user')
-    async getUsersByRoleId(@Param('roleId') roleId: string) {
-        const users = await this.usersService.getUsersByRoleId(Number(roleId));
-        return {
-            success: true,
-            message: 'Users fetched by role',
-            data: users,
-        };
-    }
-
-    /**
-     * Get user by ID
-     * GET /users/:id
+     * Get partner by ID
+     * GET /partners/:id
      */
     @Get(':id')
-    @Action('detail', 'user')
-    async findOne(@Param('id') id: string) {
-        const user = await this.usersService.findUserById(Number(id));
-        return {
-            success: true,
-            message: 'User fetched successfully',
-            data: user,
-        };
+    // @NoLogin()
+    // @Action('detail', 'partner')
+    findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+       return this.partnerService.findPartnerById(id, req.token);
     }
 
     /**
-     * Create a new user
-     * POST /users
+     * Create a new partner
+     * POST /partners
      */
     @Post()
-    @Action('create', 'user')
-    async create(@Body() createUserDto: CreateUserDto) {
-        const user = await this.usersService.createUser(createUserDto);
-        return {
-            success: true,
-            message: 'User created successfully',
-            data: user,
-        };
+    // @NoLogin()
+    // @Action('create', 'partner')
+    create(@Req() req: Request, @Body() createPartnerDto: CreatePartnerDto) {
+        console.log('req.token: ', req.token)
+        return this.partnerService.createPartner(createPartnerDto, req.token);
     }
 
     /**
-     * Update user
-     * PATCH /users/:id
+     * Update partner
+     * PATCH /partners/:id
      */
     @Patch(':id')
-    @Action('edit', 'user')
-    async update(
-        @Param('id') id: string,
-        @Body() updateUserDto: UpdateUserDto,
+    // @NoLogin()
+    // @Action('edit', 'partner')
+    update(
+        @Req() req: Request,
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updatePartnerDto: UpdatePartnerDto,
     ) {
-        const user = await this.usersService.updateUser(Number(id), updateUserDto);
-        return {
-            success: true,
-            message: 'User updated successfully',
-            data: user,
-        };
+        return this.partnerService.updatePartner(id, updatePartnerDto, req.token);
     }
 
     /**
-     * Delete user
-     * DELETE /users/:id
+     * Delete partner
+     * DELETE /partners/:id
      */
     @Delete(':id')
-    @Action('delete', 'user')
-    async remove(@Param('id') id: string) {
-        const result = await this.usersService.deleteUser(Number(id));
-        return {
-            success: true,
-            message: result.message,
-            data: result,
-        };
+    // @NoLogin()
+    // @Action('delete', 'partner')
+    remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+        return this.partnerService.deletePartner(id, req.token);
     }
 }
