@@ -57,6 +57,12 @@ export async function up(knex: Knex): Promise<void> {
         table.date("lastLogin").nullable();
         table.date("lastNotifUpdatePassword").nullable();
         table.date("lastUpdatePassword").nullable();
+        table.timestamp("createdAt").defaultTo(knex.fn.now()).comment("created timestamp");
+        table.timestamp("updatedAt").comment("updated timestamp");
+        table.timestamp("deletedAt").nullable().comment("soft delete timestamp");
+        table.integer("createdBy").comment("Users.id (FK reference)");
+        table.integer("updatedBy").comment("Users.id (FK reference)");
+        table.integer("deletedBy").comment("Users.id (FK reference)");
     });
 
     // Technicians
