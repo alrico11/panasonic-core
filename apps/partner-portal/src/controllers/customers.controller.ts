@@ -12,10 +12,11 @@ export class CustomersController {
      */
     @Get()
     // @Action('list', 'customer')
-    @NoLogin()
-    listAllCustomers(req: Request, @Query() paginationDto: PaginationDto) {
-        // return this.customerService.listAllCustomers(paginationDto, req.token);
-        return this.customerService.listAllCustomers(paginationDto);
+    // @NoLogin()
+    listAllCustomers(@Req() req: Request, @Query() paginationDto: PaginationDto) {
+        console.log('req.token: ', req.token)
+        return this.customerService.listAllCustomers(paginationDto, req.token);
+        // return this.customerService.listAllCustomers(paginationDto);
     }
 
 
@@ -24,10 +25,11 @@ export class CustomersController {
      * GET /customers/:id
      */
     @Get(':id')
-    @NoLogin()
+    // @NoLogin()
     // @Action('detail', 'customer')
     findOne(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
-       return this.customerService.findCustomerById(id)
+       return this.customerService.findCustomerById(id, req.token);
+       // return this.customerService.findCustomerById(id);
     }
 
     /**
@@ -35,11 +37,12 @@ export class CustomersController {
      * POST /customers
      */
     @Post()
-    @NoLogin()
+    // @NoLogin()
     // @Action('create', 'customer')
     create(@Req() req: Request, @Body() createCustomerDto: CreateCustomerDto) {
+        console.log('req.token: ', req.token)
         // return 'ok'
-        return this.customerService.createCustomer(createCustomerDto);
+        return this.customerService.createCustomer(createCustomerDto, req.token);
     }
 
     /**
@@ -47,14 +50,14 @@ export class CustomersController {
      * PATCH /customers/:id
      */
     @Patch(':id')
-    @NoLogin()
+    // @NoLogin()
     // @Action('edit', 'customer')
     update(
         @Req() req: Request,
         @Param('id', ParseIntPipe) id: number,
         @Body() updateCustomerDto: UpdateCustomerDto,
     ) {
-        return this.customerService.updateCustomer(id, updateCustomerDto);
+        return this.customerService.updateCustomer(id, updateCustomerDto, req.token);
     }
 
     /**
@@ -62,9 +65,9 @@ export class CustomersController {
      * DELETE /customers/:id
      */
     @Delete(':id')
-    @NoLogin()
+    // @NoLogin()
     // @Action('delete', 'customer')
-    remove(@Param('id', ParseIntPipe) id: number) {
-        return this.customerService.deleteCustomer(id);
+    remove(@Req() req: Request, @Param('id', ParseIntPipe) id: number) {
+        return this.customerService.deleteCustomer(id, req.token);
     }
 }
