@@ -8,6 +8,7 @@ import {
   PartnerModule,
   RbacModule,
   SampleModule,
+  TokenApp,
   UserModule
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
@@ -20,6 +21,9 @@ import { RbacController } from './controllers/rbac.controller';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [() => ({
+        TOKEN_APP_TYPE_ALLOWED: TokenApp.PARTNER
+      })],
       envFilePath: ['.env.local', '.env.partner-portal']
     }),
     AuthenticationModule,

@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
-import { LibraryService, NoLogin, PaginationDto, RbacService } from '@lib';
+import { InterceptorResponse, LibraryService, NoLogin, PaginationDto, RbacService } from '@lib';
 import { ApiOperation } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { LoginDto } from '../dtos/login.dto';
+import { ForgotPasswordCheckDto, ForgotPasswordDto, ForgotPasswordRequestDto, LoginDto } from '../dtos/login.dto';
 import { AuthService } from '../services/auth.service';
 
 @Controller()
@@ -78,5 +78,44 @@ export class IndexController {
             data: this.libraryService.getSampleData(),
             info: this.libraryService.getLibraryInfo()
         }
+    }
+
+    @Post('reset-password/request')
+    @NoLogin()
+    @ApiOperation({
+        description: "Do send email that contain forgot password code/link"
+    })
+    forgotPasswordRequest(@Body() payload: ForgotPasswordRequestDto) {
+        return this.authService.forgotPassword(payload.email).then(
+            () => {
+                return new InterceptorResponse('Email will be sent if account exists.')
+            }
+        )
+    }
+
+    @Post('reset-password/check')
+    @NoLogin()
+    @ApiOperation({
+        description: "Check forgot password code/link"
+    })
+    forgotPasswordCheck(@Body() payload: ForgotPasswordCheckDto) {
+        return this.authService.checkForgotPasswordCode(payload.code).then(
+            () => {
+                return new InterceptorResponse('Ok code exists.', undefined, 200)
+            }
+        )
+    }
+
+    @Post('reset-password/set')
+    @NoLogin()
+    @ApiOperation({
+        description: "Set password from reset password code/link"
+    })
+    forgotPasswordSet(@Body() payload: ForgotPasswordDto) {
+        return this.authService.resetPassword(payload.code, payload.password).then(
+            () => {
+                return new InterceptorResponse('Ok password changed.')
+            }
+        )
     }
 }

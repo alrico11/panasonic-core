@@ -107,7 +107,7 @@ export class AuthService {
                 })
             } else {
                 await UserModel.query(trx).findById(user.id).update({
-                    loginAttempts: UserModel.raw('"loginAttempts" + 1'),
+                    loginAttempts: UserModel.raw('COALESCE("loginAttempts",0) + 1'),
                     lastLogin: UserModel.fn.now()
                 })
             }
@@ -180,7 +180,7 @@ export class AuthService {
             }
 
             await UserModel.query(trx).findById(user.id).update({
-                otpCodeAttempt: UserModel.raw('"otpCodeAttempt" + 1')
+                otpCodeAttempt: UserModel.raw('COALESCE("otpCodeAttempt",0) + 1')
             })
 
             if (!user.otpCode
@@ -215,7 +215,7 @@ export class AuthService {
                 return Promise.reject(new ForbiddenException('Too many resend.'))
             }
             await UserModel.query(trx).findById(user.id).update({
-                otpCodeAttempt: UserModel.raw('"otpCodeAttempt" + 1')
+                otpCodeAttempt: UserModel.raw('COALESCE("otpCodeAttempt",0) + 1')
             })
 
             const otpAllowResendAt = new Date(user.otpExpiredAt.getTime() - this.otpService.expiresInMs + this.allowResendAfter)
