@@ -79,31 +79,4 @@ export class IndexController {
             info: this.libraryService.getLibraryInfo()
         }
     }
-
-    @ApiOperation({
-        summary: 'List Module',
-        description: 'List all available Module'
-    })
-    @Get('modules')
-    async listModules(@Query() pg: PaginationDto) {
-        return this.rbacService.moduleList(pg)
-    }
-
-    @ApiOperation({
-        summary: 'List Role',
-        description: 'List all available Role'
-    })
-    @Get('roles')
-    async listRoles(@Query() pg: PaginationDto) {
-        return this.rbacService.roleList(pg)
-    }
-
-    @ApiOperation({
-        summary: 'List Role',
-        description: 'List all available Role'
-    })
-    @Get('permissions')
-    async listPermissions(@Query() pg: PaginationDto) {
-        return this.rbacService.permissionList(pg)
-    }
 }
