@@ -13,7 +13,8 @@ import {
   MasterDataModule,
   TechnicianModule,
   ChargeModule,
-  InvoiceModule
+  InvoiceModule,
+  WorkOrderModule
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomersController } from './controllers/customers.controller';
@@ -24,6 +25,7 @@ import { MasterDataController } from './controllers/master-data.controller';
 import { TechniciansController } from './controllers/technicians.controller';
 import { ChargesController } from './controllers/charges.controller';
 import { InvoicesController } from './controllers/invoices.controller';
+import { WorkOrderController } from './controllers/work-order.controller';
 
 @Module({
   imports: [
@@ -45,7 +47,8 @@ import { InvoicesController } from './controllers/invoices.controller';
     ChargeModule,
     InvoiceModule,
     PartnerModule,
-    RbacModule
+    RbacModule,
+    WorkOrderModule
   ],
   controllers: [
     IndexController,
@@ -55,7 +58,8 @@ import { InvoicesController } from './controllers/invoices.controller';
     MasterDataController,
     TechniciansController,
     ChargesController,
-    InvoicesController
+    InvoicesController,
+    WorkOrderController
   ],
   providers: [AuthService],
 })
