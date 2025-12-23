@@ -9,13 +9,21 @@ import {
   RbacModule,
   SampleModule,
   TokenApp,
-  UserModule
+  UserModule,
+  MasterDataModule,
+  TechnicianModule,
+  ChargeModule,
+  InvoiceModule
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomersController } from './controllers/customers.controller';
 import { AuthService } from './services/auth.service';
 import { UsersController } from './controllers/users.controller';
 import { RbacController } from './controllers/rbac.controller';
+import { MasterDataController } from './controllers/master-data.controller';
+import { TechniciansController } from './controllers/technicians.controller';
+import { ChargesController } from './controllers/charges.controller';
+import { InvoicesController } from './controllers/invoices.controller';
 
 @Module({
   imports: [
@@ -32,10 +40,23 @@ import { RbacController } from './controllers/rbac.controller';
     SampleModule,
     CustomerModule,
     UserModule,
+    MasterDataModule,
+    TechnicianModule,
+    ChargeModule,
+    InvoiceModule,
     PartnerModule,
     RbacModule
   ],
-  controllers: [IndexController, CustomersController, UsersController, RbacController],
+  controllers: [
+    IndexController,
+    CustomersController,
+    UsersController,
+    RbacController,
+    MasterDataController,
+    TechniciansController,
+    ChargesController,
+    InvoicesController
+  ],
   providers: [AuthService],
 })
 export class PartnerPortalModule { }
