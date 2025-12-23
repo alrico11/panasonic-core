@@ -7,13 +7,14 @@ import {
   LibraryModule,
   RbacModule,
   SampleModule,
-  UserModule
+  UserModule,
+  WorkOrderModule
 } from '@lib';
 import { IndexController } from './controllers/index.controller';
 import { CustomersController } from './controllers/customers.controller';
 import { AuthService } from './services/auth.service';
 import { UsersController } from './controllers/users.controller';
-
+import { WorkOrderController } from './controllers/work-order.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,9 +27,10 @@ import { UsersController } from './controllers/users.controller';
     SampleModule,
     CustomerModule,
     UserModule,
-    RbacModule
+    RbacModule,
+    WorkOrderModule
   ],
-  controllers: [IndexController, CustomersController, UsersController],
+  controllers: [IndexController, CustomersController, UsersController, WorkOrderController],
   providers: [AuthService],
 })
 export class PartnerPortalModule { }
