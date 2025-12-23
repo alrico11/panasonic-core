@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Survey OTP</title>
+    <style>
+      body { font-family: Arial, sans-serif; color: #222; }
+      .container { max-width: 640px; margin: 0 auto; padding: 24px; border: 1px solid #eee; border-radius: 8px; }
+      .brand { font-weight: 700; margin-bottom: 8px; }
+      .code { font-size: 24px; font-weight: 700; letter-spacing: 2px; padding: 8px 12px; background: #f4f6f8; display: inline-block; border-radius: 6px; }
+      .btn { display: inline-block; padding: 10px 16px; background: #1565c0; color: #fff !important; text-decoration: none; border-radius: 6px; margin-top: 12px; }
+      .muted { color: #666; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="brand"><%= locals.dealerName %></div>
+      <p>Halo <strong><%= locals.name %></strong>,</p>
+      <% if (locals.otpCode) { %>
+        <p>Kode OTP Anda:</p>
+        <div class="code"><%= locals.otpCode %></div>
+      <% } %>
+      <p>Silakan buka tautan berikut untuk mengisi survei layanan Anda:</p>
+      <p>
+        <a class="btn" href="<%= locals.surveyUrl %>" target="_blank" rel="noopener noreferrer">
+          Buka Survei
+        </a>
+      </p>
+      <p class="muted">Abaikan email ini jika Anda tidak merasa melakukan permintaan ini.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unhappy Customer Survey Report</title>
+    <style>
+      body { 
+        font-family: Arial, sans-serif; 
+        color: #333;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f8;
+      }
+      .container { 
+        max-width: 800px; 
+        margin: 0 auto; 
+        padding: 24px; 
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .header {
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 24px;
+      }
+      .brand { 
+        font-size: 24px;
+        font-weight: 700; 
+        color: #1565c0;
+        margin-bottom: 8px; 
+      }
+      .subtitle {
+        color: #666;
+        font-size: 16px;
+        margin-bottom: 24px;
+      }
+      .report-title {
+        font-size: 20px;
+        color: #333;
+        margin: 24px 0 16px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+        font-size: 14px;
+      }
+      th {
+        background-color: #1565c0;
+        color: white;
+        text-align: left;
+        padding: 12px;
+        font-weight: 600;
+      }
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+      tr:hover {
+        background-color: #f1f8ff;
+      }
+      .btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #1565c0;
+        color: white !important;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+      }
+      .footer {
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid #e0e0e0;
+        font-size: 12px;
+        color: #666;
+        text-align: center;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .text-right {
+        text-align: right;
+      }
+      .unhappy-count {
+        font-weight: bold;
+        color: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="brand">Suzuki Customer Satisfaction</div>
+        <div class="subtitle">Daily Unhappy Customer Report - <%= new Date().toLocaleDateString('en-US', { 
+          weekday: 'long', 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        }) %></div>
+      </div>
+
+      <div class="report-title">Unhappy Customer Survey Summary</div>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Dealer Name</th>
+            <th class="text-center">Instant Feedback Unhappy</th>
+            <th class="text-center">Web Survey Unhappy</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% locals.data.forEach(function(item) { %>
+            <tr>
+              <td><%= item.dealer_name %></td>
+              <td class="text-center unhappy-count"><%= item.is_instant_unhappy || 0 %></td>
+              <td class="text-center unhappy-count"><%= item.is_tele_unhappy || 0 %></td>
+              <td class="text-center">
+                <a href="<%= item.url %>" 
+                   class="btn" 
+                   target="_blank">
+                  View Dashboard
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+          </tbody>
+      </table>
+
+      <div class="footer">
+        <p>This is an automated message. Please do not reply to this email.</p>
+        <p>&copy; <%= new Date().getFullYear() %> Suzuki. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>
