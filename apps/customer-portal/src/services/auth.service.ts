@@ -1,7 +1,7 @@
-import { AuthenticationService, CustomerModel, CustomerService, OtpService, PartnerModel, TokenApp, UserModel, UserService } from '@lib';
+import { AuthenticationService, CustomerModel, CustomerService, normalizePhoneNumber, OtpService, PartnerModel, TokenApp, UserModel, UserService } from '@lib';
 import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from '../dtos/login.dto';
-import { utils } from '@lib';
+
 import * as ms from 'ms';
 import { ConfigService } from '@nestjs/config';
 
@@ -61,7 +61,7 @@ export class AuthService {
 
     private async loginWithPhone(phone: string) {
 
-        phone = utils.normalizePhoneNumber(phone)
+        phone = normalizePhoneNumber(phone)
         // Find Customer by phone, may be matched with multiple customers
         const customers = await this.customerService.findAllRelatedCustomerByPhone(phone)
 
