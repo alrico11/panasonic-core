@@ -26,8 +26,8 @@ export class AuthService {
         configService: ConfigService,
     ) {
         this.maxLoginAttempts = parseInt(configService.get('CUSTOMER_MAX_LOGIN_ATTEMPTS', '5'))
-        this.maxLoginExpiresIn = ms(configService.get('CUSTOMER_MAX_LOGIN_EXPIRES_IN', '1h'))
-        this.allowResendAfter = ms(configService.get('CUSTOMER_ALLOW_RESEND_AFTER', '2m'))
+        this.maxLoginExpiresIn = ms(configService.get('CUSTOMER_MAX_LOGIN_EXPIRES_IN', '1h') as ms.StringValue)
+        this.allowResendAfter = ms(configService.get('CUSTOMER_ALLOW_RESEND_AFTER', '2m') as ms.StringValue)
 
         if (isNaN(this.maxLoginAttempts))
             this.maxLoginAttempts = 5

@@ -1,18 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosInstance } from 'axios';
-import { 
-  WhatsAppPayload, 
-  WhatsAppSurveyPayload, 
+import {
+  WhatsAppPayload,
+  WhatsAppSurveyPayload,
   WhatsAppOTPPayload,
   QontakApiResponse,
   QontakMessageRequest,
   isSurveyMessage,
   isOTPMessage
 } from './whatsapp.entity';
-import { VendorConfigService } from '../vendor/vendor-config.service';
-import { NatsService } from '@tcid/core/nats/nats.service';
-import { NATS_SUBJECTS, QUOTA_ENVELOPE_SUBJECT } from '@tcid/core/nats/nats.constant';
+import axios from 'axios';
+import { NatsService, NATS_SUBJECTS, QUOTA_ENVELOPE_SUBJECT } from '@lib';
 
 @Injectable()
 export class WhatsAppService {
@@ -23,7 +22,7 @@ export class WhatsAppService {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly vendorConfig: VendorConfigService,
+    // private readonly vendorConfig: VendorConfigService,
     private readonly natsService: NatsService,
   ) {
     this.defaultDealerName = this.configService.get<string>('QONTAK_DEALER_NAME') || 'Suzuki';
@@ -43,20 +42,31 @@ export class WhatsAppService {
   async sendWhatsAppMessage(to: string, payload: WhatsAppPayload): Promise<QontakApiResponse> {
     try {
       this.logger.debug(`[WA] send type=${payload.messageType} to=${to}`);
-      await this.vendorConfig.ensureLoaded();
-      const http = this.vendorConfig.getHttp();
-      const { templateId, channelIntegrationId } = this.vendorConfig.getTemplateAndChannel();
-      if (!templateId || !channelIntegrationId) {
+      // await this.vendorConfig.ensureLoaded();
+
+      // const { templateId, channelIntegrationId } = this.vendorConfig.getTemplateAndChannel();
+      // if (!templateId || !channelIntegrationId) {
+      //   throw new Error('WhatsApp vendor template/channel not found');
+      // }
+      const baseUrl = this.configService.get<string>('WHATAPP_BASE_URL');
+      const templateId = this.configService.get<string>('WHATSAPP_TEMPLATE_ID');
+      const channelIntegrationId = this.configService.get<string>('WHATSAPP_CHANNEL_ID');
+      const token = this.configService.get<string>('WHATSAPP_TOKEN');
+      if (!templateId || !channelIntegrationId || !token) {
         throw new Error('WhatsApp vendor template/channel not found');
       }
-      const endpoint = await this.vendorConfig.getEndpointByName('whatsapp-blast');
-      if(!endpoint) {
+      const endpoint = await this.configService.get('WHATSAPP_BLAST_ENDPOINT');
+      if (!endpoint) {
         throw new Error('WhatsApp vendor endpoint not found');
       }
-
+      const http = axios.create({
+        baseURL: baseUrl || undefined,
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        timeout: 15000,
+      });
       const body = this.buildQontakBroadcastPayload(this.formatPhoneNumber(to), payload, templateId!, channelIntegrationId!);
 
-      if(!body) {
+      if (!body) {
         throw new Error('WhatsApp vendor body not found');
       }
 
@@ -64,7 +74,6 @@ export class WhatsAppService {
         const trxId = `dryrun-${Date.now()}`;
         this.logger.debug(`[WHATSAPP][DRY-RUN] ${endpoint.method} ${endpoint.url} headers=${JSON.stringify(endpoint.headers)} body=${JSON.stringify(body)}`);
         try {
-          await this.emitQuotaSync(payload, to, body, { data: { id: trxId } }, trxId);
           this.logger.debug('[QUOTA-LOG][DRY-RUN] emitted quota.sync');
         } catch (e) {
           this.logger.error('[QUOTA-LOG][DRY-RUN] Failed to emit quota.sync', e?.response?.data || e?.message || e);
@@ -78,7 +87,6 @@ export class WhatsAppService {
       this.logger.log(`[QONTAK][OK] to=${to} trxId=${trxId || '-'} status=${response.data?.status}`);
 
       try {
-        await this.emitQuotaSync(payload, to, body, response, trxId);
         this.logger.debug('[QUOTA-LOG] emitted quota.sync');
       } catch (e) {
         this.logger.error('[QUOTA-LOG] Failed to emit quota.sync', e?.response?.data || e?.message || e);
@@ -88,7 +96,7 @@ export class WhatsAppService {
 
     } catch (error) {
       this.logger.error(`Failed to send WhatsApp message to ${to}: ${error?.response?.data?.message || error?.message || 'unknown error'}`);
-      
+
       return {
         status: 'error',
         error: error.response?.data?.message || error.message
@@ -96,24 +104,6 @@ export class WhatsAppService {
     }
   }
 
-  async emitQuotaSync(payload: WhatsAppPayload, to: string, body: any, response: any, trxId: string) {
-    const isValidSurveyMessage = isSurveyMessage(payload);
-    const dealerId = isValidSurveyMessage ? payload.dealerId : (payload as any).dealerId;
-    const surveyId = isValidSurveyMessage ? (payload as any).surveyId || null : null;
-    const isResend = isValidSurveyMessage ? (payload as any).isResend || false : false;
-    await this.natsService.emit(NATS_SUBJECTS.QUOTA_SYNC, { subject: QUOTA_ENVELOPE_SUBJECT, data: {
-      dryRun: this.isDryRun,
-      dealerId,
-      automobileSurveyId: surveyId,
-      usageType: isSurveyMessage(payload) ? `whatsapp:SURVEY_OTP_WEB${isResend ? ':RESEND' : ''}` : `whatsapp${isResend ? ':RESEND' : ''}`,
-      phoneNumber: this.formatPhoneNumber(to),
-      messageContent: body,
-      deliveryStatus: 'sent',
-      deliveryResponse: response,
-      vendorTransactionId: trxId,
-    }});
-  }
-  
   /**
    * Build Qontak template broadcast payload using seeded template/channel config.
    * - OTP: Use otp from OTP message or from survey payload if provided (SURVEY_OTP_WEB case)
@@ -160,13 +150,13 @@ export class WhatsAppService {
    */
   private formatPhoneNumber(phoneNumber: string): string {
     let cleaned = phoneNumber.replace(/\D/g, '');
-    
+
     if (cleaned.startsWith('0')) {
       cleaned = '62' + cleaned.substring(1);
     } else if (!cleaned.startsWith('62')) {
       cleaned = '62' + cleaned;
     }
-    
+
     return cleaned;
   }
 }

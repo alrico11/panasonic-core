@@ -15,7 +15,7 @@ export class AuthService {
         private readonly authenticationService: AuthenticationService,
         configService: ConfigService) {
         this.maxLoginAttempts = parseInt(configService.get('PARTNER_MAX_LOGIN_ATTEMPTS', '5'))
-        this.maxLoginExpiresIn = ms(configService.get('PARTNER_MAX_LOGIN_EXPIRES_IN', '1h'))
+        this.maxLoginExpiresIn = ms(configService.get('PARTNER_MAX_LOGIN_EXPIRES_IN', '1h') as ms.StringValue)
 
         if (isNaN(this.maxLoginAttempts))
             this.maxLoginAttempts = 5

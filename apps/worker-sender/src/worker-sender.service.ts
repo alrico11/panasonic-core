@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { EmailService } from './email/email.service';
 import { WhatsAppService } from './whatsapp/whatsapp.service';
-import { NatsChannelPayload, CHANNEL_DISPATCHER_TYPE, NATS_CHANNEL_ACTION } from '@tcid/core/nats/nats.interface';
+import { NatsChannelPayload, CHANNEL_DISPATCHER_TYPE, NATS_CHANNEL_ACTION } from '@lib';
 import {
   isActivationUser,
   isResetPassword,
@@ -20,7 +20,7 @@ export class WorkerSenderService {
     private readonly emailService: EmailService,
     private readonly whatsAppService: WhatsAppService,
     private readonly logger: Logger,
-  ) {}
+  ) { }
 
   getHello(): string {
     return 'Hello World!';
@@ -31,7 +31,7 @@ export class WorkerSenderService {
   ): Promise<void> {
     this.logger.log(`[EMAIL PAYLOAD]: ${JSON.stringify(natsPayload)}`);
     this.logger.log(`email.action=${natsPayload.action}`);
-    
+
     if (natsPayload.action === NATS_CHANNEL_ACTION.EXPORT) {
       this.logger.debug(`export ${isExport(natsPayload.payload)}`);
       if (isExport(natsPayload.payload)) {
@@ -147,7 +147,7 @@ export class WorkerSenderService {
       natsPayload.action = NATS_CHANNEL_ACTION.SURVEY_OTP_WEB as any;
     }
     this.logger.log(`whatsapp.action=${natsPayload.action}`);
-    
+
     try {
       if (natsPayload.action === NATS_CHANNEL_ACTION.SURVEY_OTP_WEB) {
         const p: any = natsPayload.payload as any;
@@ -187,7 +187,7 @@ export class WorkerSenderService {
     natsPayload: NatsChannelPayload<NatsPayloadChannelSender | WhatsAppPayload>,
   ): Promise<void> {
     this.logger.log(`[RETRIEVE PAYLOAD]: Channel=${natsPayload.channel}, To=${natsPayload.to}`);
-    
+
     try {
       if (natsPayload.channel === CHANNEL_DISPATCHER_TYPE.EMAIL) {
         await this.processEmail(natsPayload as NatsChannelPayload<NatsPayloadChannelSender>);
