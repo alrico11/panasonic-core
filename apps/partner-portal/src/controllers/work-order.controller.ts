@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
 import { WorkOrderService, CreateWorkOrderDto } from '@lib';
+import { Request } from 'express';
 
 @Controller('work-orders')
 export class WorkOrderController {
@@ -11,8 +12,8 @@ export class WorkOrderController {
      */
     @Post()
     // @Action('create') // TODO: set authorization
-    async create(@Body() createWorkOrderDto: CreateWorkOrderDto) {
-        const workOrder = await this.workOrderService.create(createWorkOrderDto);
+    async create(@Body() createWorkOrderDto: CreateWorkOrderDto, @Req() req: Request) {
+        const workOrder = await this.workOrderService.create(createWorkOrderDto, req.token);
         return {
             success: true,
             message: 'Work order created successfully',
@@ -31,6 +32,17 @@ export class WorkOrderController {
             success: true,
             message: 'Work orders retrieved successfully',
             data: workOrders,
+        };
+    }
+
+    @Delete(':id')
+    async remove(@Param('id') id: string, @Req() req: Request) {
+        console.log('req.token: ', req)
+        // throw new Error('Not implemented yet');
+        await this.workOrderService.softDelete(id, req.token);
+        return {
+            success: true,
+            message: 'Work order deleted successfully',
         };
     }
 }
