@@ -3,7 +3,7 @@ import { WorkerSenderModule } from './worker-sender.module';
 import { Module } from '@nestjs/common';
 import { EmailConsumerController } from './email-consumer.controller';
 import { WhatsAppConsumerController } from './whatsapp-consumer.controller';
-import { CHANNEL_SENDER_DISPATCHER } from '@tcid/core/nats/nats.interface';
+import { CHANNEL_SENDER_DISPATCHER } from '@lib';
 import { NatsJetStreamServer } from '@nestjs-plugins/nestjs-nats-jetstream-transport';
 import { RetentionPolicy, StorageType } from 'nats';
 
@@ -12,13 +12,13 @@ import { RetentionPolicy, StorageType } from 'nats';
   imports: [WorkerSenderModule],
   controllers: [EmailConsumerController],
 })
-class EmailConsumerModule {}
+class EmailConsumerModule { }
 
 @Module({
   imports: [WorkerSenderModule],
   controllers: [WhatsAppConsumerController],
 })
-class WhatsAppConsumerModule {}
+class WhatsAppConsumerModule { }
 
 async function bootstrap() {
   // EMAIL microservice (push consumer)

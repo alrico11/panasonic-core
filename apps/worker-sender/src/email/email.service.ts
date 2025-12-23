@@ -116,7 +116,6 @@ export class EmailService {
           name: data.name,
           otpCode: data.otpCode,
           surveyUrl: data.surveyUrl,
-          dealerName: data.dealerName || 'Suzuki',
         },
       });
       return true;

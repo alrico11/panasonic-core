@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { Ctx, EventPattern, Payload } from '@nestjs/microservices';
 import { NatsJetStreamContext } from '@nestjs-plugins/nestjs-nats-jetstream-transport';
-import { CHANNEL_SENDER_DISPATCHER, NatsChannelPayload } from '@tcid/core/nats/nats.interface';
+import { CHANNEL_SENDER_DISPATCHER, NatsChannelPayload } from '@lib';
 import { WhatsAppPayload } from './whatsapp/whatsapp.entity';
 import { WorkerSenderService } from './worker-sender.service';
 import { Logger } from '@nestjs/common';
@@ -9,7 +9,7 @@ import { Logger } from '@nestjs/common';
 @Controller()
 export class WhatsAppConsumerController {
   private readonly logger = new Logger(WhatsAppConsumerController.name);
-  constructor(private readonly workerSenderService: WorkerSenderService) {}
+  constructor(private readonly workerSenderService: WorkerSenderService) { }
 
   /**
    * Handle WhatsApp channel dispatch messages. Delegates to WorkerSenderService.
