@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
-import { LibraryService, NoLogin, PaginationDto, RbacService } from '@lib';
+import { InterceptorResponse, LibraryService, NoLogin, PaginationDto, RbacService } from '@lib';
 import { ApiOperation } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { LoginDto } from '../dtos/login.dto';
+import { ForgotPasswordCheckDto, ForgotPasswordDto, ForgotPasswordRequestDto, LoginDto } from '../dtos/login.dto';
 import { AuthService } from '../services/auth.service';
 
 @Controller()
@@ -80,30 +80,42 @@ export class IndexController {
         }
     }
 
+    @Post('reset-password/request')
+    @NoLogin()
     @ApiOperation({
-        summary: 'List Module',
-        description: 'List all available Module'
+        description: "Do send email that contain forgot password code/link"
     })
-    @Get('modules')
-    async listModules(@Query() pg: PaginationDto) {
-        return this.rbacService.moduleList(pg)
+    forgotPasswordRequest(@Body() payload: ForgotPasswordRequestDto) {
+        return this.authService.forgotPassword(payload.email).then(
+            () => {
+                return new InterceptorResponse('Email will be sent if account exists.')
+            }
+        )
     }
 
+    @Post('reset-password/check')
+    @NoLogin()
     @ApiOperation({
-        summary: 'List Role',
-        description: 'List all available Role'
+        description: "Check forgot password code/link"
     })
-    @Get('roles')
-    async listRoles(@Query() pg: PaginationDto) {
-        return this.rbacService.roleList(pg)
+    forgotPasswordCheck(@Body() payload: ForgotPasswordCheckDto) {
+        return this.authService.checkForgotPasswordCode(payload.code).then(
+            () => {
+                return new InterceptorResponse('Ok code exists.', undefined, 200)
+            }
+        )
     }
 
+    @Post('reset-password/set')
+    @NoLogin()
     @ApiOperation({
-        summary: 'List Role',
-        description: 'List all available Role'
+        description: "Set password from reset password code/link"
     })
-    @Get('permissions')
-    async listPermissions(@Query() pg: PaginationDto) {
-        return this.rbacService.permissionList(pg)
+    forgotPasswordSet(@Body() payload: ForgotPasswordDto) {
+        return this.authService.resetPassword(payload.code, payload.password).then(
+            () => {
+                return new InterceptorResponse('Ok password changed.')
+            }
+        )
     }
 }

@@ -5,6 +5,7 @@ import type { Request, Response } from 'express';
 import { LoginDto } from '../dtos/login.dto';
 import { AuthService } from '../services/auth.service';
 import { VerifyOtpDto } from '../dtos/verify-otp.dto';
+import { ResendOtpDto } from '../dtos/resend-otp.dto';
 
 @Controller()
 export class IndexController {
@@ -88,5 +89,13 @@ export class IndexController {
                 return ret
             }
         )
+    }
+    @Post('resend-otp')
+    @NoLogin()
+    @ApiOperation({
+        description: "Resend OTP code via email/telephone"
+    })
+    resendOtp(@Body() payload: ResendOtpDto) {
+        return this.authService.resendOtp(payload.userId, payload.via)
     }
 }

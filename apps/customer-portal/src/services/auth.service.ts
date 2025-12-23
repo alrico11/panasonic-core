@@ -1,5 +1,5 @@
 import { AuthenticationService, CustomerModel, CustomerService, OtpService, PartnerModel, TokenApp, UserModel, UserService } from '@lib';
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from '../dtos/login.dto';
 import { utils } from '@lib';
 import * as ms from 'ms';
@@ -16,6 +16,7 @@ export class AuthService {
     logger = new Logger('AuthService')
     private maxLoginAttempts: number
     private maxLoginExpiresIn: number
+    private allowResendAfter: number
 
     constructor(
         private readonly authenticationService: AuthenticationService,
@@ -26,12 +27,16 @@ export class AuthService {
     ) {
         this.maxLoginAttempts = parseInt(configService.get('CUSTOMER_MAX_LOGIN_ATTEMPTS', '5'))
         this.maxLoginExpiresIn = ms(configService.get('CUSTOMER_MAX_LOGIN_EXPIRES_IN', '1h'))
+        this.allowResendAfter = ms(configService.get('CUSTOMER_ALLOW_RESEND_AFTER', '2m'))
 
         if (isNaN(this.maxLoginAttempts))
             this.maxLoginAttempts = 5
 
         if (isNaN(this.maxLoginExpiresIn))
             this.maxLoginExpiresIn = 60 * 60 * 1000
+
+        if (isNaN(this.allowResendAfter))
+            this.allowResendAfter = 2 * 60 * 1000
     }
 
     login(login: LoginDto) {
@@ -102,7 +107,7 @@ export class AuthService {
                 })
             } else {
                 await UserModel.query(trx).findById(user.id).update({
-                    loginAttempts: UserModel.raw('"loginAttempts" + 1'),
+                    loginAttempts: UserModel.raw('COALESCE("loginAttempts",0) + 1'),
                     lastLogin: UserModel.fn.now()
                 })
             }
@@ -118,7 +123,7 @@ export class AuthService {
 
         let generateNewOtp = false
         if (user.otpCode) {
-            if (user.isOtpUsed || !user.otpExpiredAt || user.otpExpiredAt < new Date()  ) {
+            if (user.isOtpUsed || !user.otpExpiredAt || user.otpExpiredAt < new Date()) {
                 generateNewOtp = true
             }
         } else {
@@ -126,31 +131,40 @@ export class AuthService {
         }
 
         if (generateNewOtp) {
-            const otp = this.otpService.generateOtp()
-            const changes = {
-                otpCode: otp.otpCode,
-                otpCodeAttempt: 0,
-                otpExpiredAt: otp.otpExpiredAt as any
-            }
-            await UserModel.query().findById(user.id).update(changes)
-            switch (authKind.channel) {
-                case 'email':
-                    // todo: email sender
-                    this.logger.log(`Send OTP via email to ${authKind.value} [${changes.otpCode}] (userId: ${user.id})`)
-                    break
-                case 'phone':
-                    // todo: Phone sender
-                    this.logger.log(`Send OTP via phone to ${authKind.value} [${changes.otpCode}] (userId: ${user.id})`)
-                    break
-                default:
-                    this.logger.warn(`No sender for channel ${authKind.channel} to ${authKind.value} (userId: ${user.id})`)
-                    break
-            }
+            await this.generateAndSendOtp(user.id, authKind)
         } else {
             this.logger.log(`Not sending ${authKind.channel} to ${authKind.value}, using OLD otp code.`)
         }
 
         return { userId: user.id }
+    }
+
+    private async generateAndSendOtp(userId: number, authKind: AuthKind) {
+        const otp = this.otpService.generateOtp()
+        const changes = {
+            otpCode: otp.otpCode,
+            otpCodeAttempt: 0,
+            otpExpiredAt: otp.otpExpiredAt as any
+        }
+        await UserModel.query().findById(userId).update(changes)
+        await this.sendOtp(changes.otpCode, authKind, userId)
+        return otp
+    }
+
+    private async sendOtp(code: string, authKind: AuthKind, userId?: number) {
+        switch (authKind.channel) {
+            case 'email':
+                // todo: email sender
+                this.logger.log(`Send OTP via email to ${authKind.value} [${code}] (userId: ${userId})`)
+                break
+            case 'phone':
+                // todo: Phone sender
+                this.logger.log(`Send OTP via phone to ${authKind.value} [${code}] (userId: ${userId})`)
+                break
+            default:
+                this.logger.warn(`No sender for channel ${authKind.channel} to ${authKind.value} (userId: ${userId})`)
+                break
+        }
     }
 
     async verifyOtp(userId: number, otpCode: string) {
@@ -160,12 +174,22 @@ export class AuthService {
             if (!user) {
                 return Promise.reject(new BadRequestException(`Customer User not found.`))
             }
+            let otpCodeAttempt = user.otpCodeAttempt + 1
+            if (otpCodeAttempt >= this.otpService.maxAttempts) {
+                return Promise.reject(new ForbiddenException('Too many OTP fails.'))
+            }
+
+            await UserModel.query(trx).findById(user.id).update({
+                otpCodeAttempt: UserModel.raw('COALESCE("otpCodeAttempt",0) + 1')
+            })
 
             if (!user.otpCode
                 || user.isOtpUsed
                 || user.otpExpiredAt >= new Date()
                 || user.otpCode !== otpCode
             ) {
+                if (user.otpCode) {
+                }
                 return Promise.reject(new BadRequestException(`OTP Code expired, invalid or not found.`))
             }
 
@@ -179,7 +203,51 @@ export class AuthService {
     }
 
     async resendOtp(userId: number, via: AuthKind['channel']) {
+        return UserModel.transaction(async trx => {
+            const user = await UserModel.query(trx).findById(userId).forUpdate()
 
+            if (!user) {
+                return Promise.reject(new BadRequestException(`Customer User not found.`))
+            }
+            // Because no dedicated field for OTP resend counter, treat is as OTP attemps
+            let otpCodeAttempt = user.otpCodeAttempt + 1
+            if (otpCodeAttempt >= this.otpService.maxAttempts) {
+                return Promise.reject(new ForbiddenException('Too many resend.'))
+            }
+            await UserModel.query(trx).findById(user.id).update({
+                otpCodeAttempt: UserModel.raw('COALESCE("otpCodeAttempt",0) + 1')
+            })
+
+            const otpAllowResendAt = new Date(user.otpExpiredAt.getTime() - this.otpService.expiresInMs + this.allowResendAfter)
+
+            if (new Date() < otpAllowResendAt) {
+                return Promise.reject(new BadRequestException(`You can resend OTP at ${otpAllowResendAt.toLocaleString("id-ID", {
+                    timeZone: "Asia/Jakarta",
+                })}`))
+            }
+            let generateNewOtp = false
+            if (user.otpCode) {
+                if (user.otpExpiredAt < new Date()) {
+                    generateNewOtp = true
+                }
+            } else {
+                generateNewOtp = true
+            }
+
+            const authKind: AuthKind = {
+                channel: via,
+                value: via == 'email' ? user.email : user.mobilePhone
+            }
+
+            if (generateNewOtp) {
+                await this.generateAndSendOtp(user.id, authKind)
+                return { resend: true, otpCodeChanged: true }
+            } else {
+                // just resend old code
+                this.logger.debug(`Resend old OTP code for userId: ${userId}`)
+                await this.sendOtp(user.otpCode, authKind)
+                return { resend: true, otpCodeChanged: false }
+            }
+        })
     }
-
 }
