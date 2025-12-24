@@ -17,7 +17,7 @@ export class CustomersController {
   // @Action('list', 'customer')
   // @NoLogin()
   listAllCustomers(@Req() req: Request, @Query() paginationDto: PaginationDto) {
-    console.log('req.token: ', req.token)
+    // console.log('req.token: ', req.token)
     return this.customerService.listAllCustomers(paginationDto, req.token);
     // return this.customerService.listAllCustomers(paginationDto);
   }
