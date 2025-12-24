@@ -10,14 +10,26 @@ import {
   SampleModule,
   TokenApp,
   UserModule,
-  WorkOrderModule
+  WorkOrderModule,
+  AssetModule,
+  DealerModule,
+  ModelModule,
+  ProductModule,
+  WarrantyModule,
 } from '@lib';
-import { IndexController } from './controllers/index.controller';
-import { CustomersController } from './controllers/customers.controller';
 import { AuthService } from './services/auth.service';
-import { UsersController } from './controllers/users.controller';
-import { RbacController } from './controllers/rbac.controller';
-import { WorkOrderController } from './controllers/work-order.controller';
+import {
+  IndexController,
+  CustomersController,
+  UsersController,
+  RbacController,
+  WorkOrderController,
+  AssetsController,
+  DealersController,
+  ModelsController,
+  ProductsController,
+  WarrantiesController
+} from './controllers';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,9 +47,17 @@ import { WorkOrderController } from './controllers/work-order.controller';
     UserModule,
     PartnerModule,
     RbacModule,
-    WorkOrderModule
+    WorkOrderModule,
+    AssetModule,
+    DealerModule,
+    ModelModule,
+    ProductModule,
+    WarrantyModule
   ],
-  controllers: [IndexController, CustomersController, UsersController, RbacController, WorkOrderController],
+  controllers: [
+    IndexController, CustomersController, UsersController, RbacController, WorkOrderController,
+    AssetsController, DealersController, ModelsController, ProductsController, WarrantiesController,
+  ],
   providers: [AuthService],
 })
 export class PartnerPortalModule { }
