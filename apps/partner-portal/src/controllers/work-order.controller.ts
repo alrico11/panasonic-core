@@ -34,6 +34,20 @@ export class WorkOrderController {
             data: workOrders,
         };
     }
+    
+    /**
+     * Retrieve a work order by ID
+     * GET /work-orders/:id
+     */
+    @Get(':id')
+    async findOne(@Param('id') id: string) {
+        const workOrder = await this.workOrderService.findOne(id); 
+        return {
+            success: true,
+            message: 'Work order retrieved successfully',
+            data: workOrder,
+        };
+    }
 
     /**
      * Retrieve a work order by ID
