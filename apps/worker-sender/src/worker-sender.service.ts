@@ -84,19 +84,6 @@ export class WorkerSenderService {
       }
       return;
     }
-    if (natsPayload.action === NATS_CHANNEL_ACTION.UNHAPPY_CUSTOMER_SURVEY_REPORT) {
-      this.logger.debug(`isUnhappyCustomerSurveyReport ${isUnhappyCustomerSurveyReport(natsPayload.payload)}`);
-      if (isUnhappyCustomerSurveyReport(natsPayload.payload)) {
-        await this.emailService.sendUnhappyCustomerSurvey(
-          natsPayload.to as string,
-          natsPayload.subject as string,
-          natsPayload.payload,
-        );
-      } else {
-        this.logger.warn('EMAIL action UNHAPPY_CUSTOMER_SURVEY but payload is not UnhappyCustomerSurvey shape');
-      }
-      return;
-    }
 
     if (isExport(natsPayload.payload)) {
       await this.emailService.sendExportFile(

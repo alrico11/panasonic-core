@@ -3,15 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import { AxiosInstance } from 'axios';
 import {
   WhatsAppPayload,
-  WhatsAppSurveyPayload,
-  WhatsAppOTPPayload,
   QontakApiResponse,
-  QontakMessageRequest,
   isSurveyMessage,
   isOTPMessage
 } from './whatsapp.entity';
 import axios from 'axios';
-import { NatsService, NATS_SUBJECTS, QUOTA_ENVELOPE_SUBJECT } from '@lib';
+import { NatsService } from '@lib';
 
 @Injectable()
 export class WhatsAppService {
