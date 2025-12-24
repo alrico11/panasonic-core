@@ -1,4 +1,4 @@
-import { AuthenticationService, PartnerModel, TokenApp, UserModel, utils } from '@lib';
+import { AuthenticationService, PartnerModel, randomStrings, TokenApp, UserModel } from '@lib';
 import { ForbiddenException, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { compare, hashSync } from 'bcrypt';
@@ -109,7 +109,7 @@ export class AuthService {
             throw new UnauthorizedException('Invalid email or password')
         }
         // Create random Code
-        const code = utils.randomStrings(user.id.toString(36) + '-')
+        const code = randomStrings(user.id.toString(36) + '-')
 
         await PartnerModel.query().findById(partnerUser.id).update({
             forgotPassword: code
