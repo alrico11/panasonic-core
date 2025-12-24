@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Post, Req } from '@nestjs/common';
-import { WorkOrderService, CreateWorkOrderDto } from '@lib';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req } from '@nestjs/common';
+import { WorkOrderService, CreateWorkOrderDto, UpdateWorkOrderDto } from '@lib';
 import { Request } from 'express';
 
 @Controller('work-orders')
@@ -33,6 +33,19 @@ export class WorkOrderController {
             message: 'Work orders retrieved successfully',
             data: workOrders,
         };
+    }
+
+    /**
+     * Retrieve a work order by ID
+     * GET /work-orders/:id
+     */
+    @Patch(':id')
+    update(
+        @Param('id') id: number,
+        @Body() updateWorkOrderDto: UpdateWorkOrderDto,
+        @Req() req: Request,
+    ) {
+        return this.workOrderService.update(id, updateWorkOrderDto, req.token);
     }
 
     @Delete(':id')
