@@ -26,8 +26,8 @@ export class AuthService {
         configService: ConfigService,
     ) {
         this.maxLoginAttempts = parseInt(configService.get('CUSTOMER_MAX_LOGIN_ATTEMPTS', '5'))
-        this.maxLoginExpiresIn = ms(configService.get('CUSTOMER_MAX_LOGIN_EXPIRES_IN', '1h'))
-        this.allowResendAfter = ms(configService.get('CUSTOMER_ALLOW_RESEND_AFTER', '2m'))
+        this.maxLoginExpiresIn = ms(configService.get('CUSTOMER_MAX_LOGIN_EXPIRES_IN', '1h') as ms.StringValue)
+        this.allowResendAfter = ms(configService.get('CUSTOMER_ALLOW_RESEND_AFTER', '2m') as ms.StringValue)
 
         if (isNaN(this.maxLoginAttempts))
             this.maxLoginAttempts = 5
@@ -107,7 +107,7 @@ export class AuthService {
                 })
             } else {
                 await UserModel.query(trx).findById(user.id).update({
-                    loginAttempts: UserModel.raw('"loginAttempts" + 1'),
+                    loginAttempts: UserModel.raw('COALESCE("loginAttempts",0) + 1'),
                     lastLogin: UserModel.fn.now()
                 })
             }
@@ -180,7 +180,7 @@ export class AuthService {
             }
 
             await UserModel.query(trx).findById(user.id).update({
-                otpCodeAttempt: UserModel.raw('"otpCodeAttempt" + 1')
+                otpCodeAttempt: UserModel.raw('COALESCE("otpCodeAttempt",0) + 1')
             })
 
             if (!user.otpCode
@@ -215,7 +215,7 @@ export class AuthService {
                 return Promise.reject(new ForbiddenException('Too many resend.'))
             }
             await UserModel.query(trx).findById(user.id).update({
-                otpCodeAttempt: UserModel.raw('"otpCodeAttempt" + 1')
+                otpCodeAttempt: UserModel.raw('COALESCE("otpCodeAttempt",0) + 1')
             })
 
             const otpAllowResendAt = new Date(user.otpExpiredAt.getTime() - this.otpService.expiresInMs + this.allowResendAfter)

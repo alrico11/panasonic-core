@@ -49,6 +49,16 @@
         "webpackConfigPath": "webpack.config.js",
         "tsConfigPath": "apps/technician-portal/tsconfig.app.json"
       }
+    },
+    "worker-sender": {
+      "type": "application",
+      "root": "apps/worker-sender",
+      "entryFile": "main",
+      "sourceRoot": "apps/worker-sender/src",
+      "compilerOptions": {
+        "webpackConfigPath": "webpack.config.js",
+        "tsConfigPath": "apps/worker-sender/tsconfig.app.json"
+      }
     }
   }
 }
