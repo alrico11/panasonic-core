@@ -48,6 +48,14 @@ export class CreateAssetDto {
   isDiscountModel?: boolean;
 
   @IsOptional()
+  @IsBoolean()
+  isDraft?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isArchived?: boolean;
+
+  @IsOptional()
   @IsString()
   @MaxLength(50)
   status?: string;
@@ -107,6 +115,14 @@ export class UpdateAssetDto {
   @IsOptional()
   @IsBoolean()
   isDiscountModel?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isDraft?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isArchived?: boolean;
 
   @IsOptional()
   @IsString()
