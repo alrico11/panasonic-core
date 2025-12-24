@@ -10,12 +10,16 @@ import {
   SampleModule,
   TokenApp,
   UserModule,
-  WorkOrderModule,
   AssetModule,
   DealerModule,
   ModelModule,
   ProductModule,
   WarrantyModule,
+  WorkOrderModule,
+  MasterDataModule,
+  TechnicianModule,
+  ChargeModule,
+  InvoiceModule,
 } from '@lib';
 import { AuthService } from './services/auth.service';
 import {
@@ -28,8 +32,14 @@ import {
   DealersController,
   ModelsController,
   ProductsController,
-  WarrantiesController
+  WarrantiesController,
+  MasterDataController,
+  TechniciansController,
+  ChargesController,
+  InvoicesController,
 } from './controllers';
+
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -45,6 +55,10 @@ import {
     SampleModule,
     CustomerModule,
     UserModule,
+    MasterDataModule,
+    TechnicianModule,
+    ChargeModule,
+    InvoiceModule,
     PartnerModule,
     RbacModule,
     WorkOrderModule,
@@ -55,8 +69,20 @@ import {
     WarrantyModule
   ],
   controllers: [
-    IndexController, CustomersController, UsersController, RbacController, WorkOrderController,
-    AssetsController, DealersController, ModelsController, ProductsController, WarrantiesController,
+    AssetsController,
+    ChargesController,
+    CustomersController,
+    DealersController,
+    IndexController,
+    InvoicesController,
+    MasterDataController,
+    ModelsController,
+    ProductsController,
+    RbacController,
+    TechniciansController,
+    UsersController,
+    WarrantiesController,
+    WorkOrderController,
   ],
   providers: [AuthService],
 })
