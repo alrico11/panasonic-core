@@ -9,13 +9,36 @@ import {
   RbacModule,
   SampleModule,
   TokenApp,
-  UserModule
+  UserModule,
+  AssetModule,
+  DealerModule,
+  ModelModule,
+  ProductModule,
+  WarrantyModule,
+  WorkOrderModule,
+  MasterDataModule,
+  TechnicianModule,
+  ChargeModule,
+  InvoiceModule,
 } from '@lib';
-import { IndexController } from './controllers/index.controller';
-import { CustomersController } from './controllers/customers.controller';
 import { AuthService } from './services/auth.service';
-import { UsersController } from './controllers/users.controller';
-import { RbacController } from './controllers/rbac.controller';
+import {
+  IndexController,
+  CustomersController,
+  UsersController,
+  RbacController,
+  WorkOrderController,
+  AssetsController,
+  DealersController,
+  ModelsController,
+  ProductsController,
+  WarrantiesController,
+  MasterDataController,
+  TechniciansController,
+  ChargesController,
+  InvoicesController,
+} from './controllers';
+
 
 @Module({
   imports: [
@@ -32,10 +55,35 @@ import { RbacController } from './controllers/rbac.controller';
     SampleModule,
     CustomerModule,
     UserModule,
+    MasterDataModule,
+    TechnicianModule,
+    ChargeModule,
+    InvoiceModule,
     PartnerModule,
-    RbacModule
+    RbacModule,
+    WorkOrderModule,
+    AssetModule,
+    DealerModule,
+    ModelModule,
+    ProductModule,
+    WarrantyModule
   ],
-  controllers: [IndexController, CustomersController, UsersController, RbacController],
+  controllers: [
+    AssetsController,
+    ChargesController,
+    CustomersController,
+    DealersController,
+    IndexController,
+    InvoicesController,
+    MasterDataController,
+    ModelsController,
+    ProductsController,
+    RbacController,
+    TechniciansController,
+    UsersController,
+    WarrantiesController,
+    WorkOrderController,
+  ],
   providers: [AuthService],
 })
 export class PartnerPortalModule { }

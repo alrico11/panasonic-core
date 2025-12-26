@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Export Sukses</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header {
+      background-color: #6b70ff;
+      padding: 20px;
+      text-align: center;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .content {
+      padding: 20px;
+      text-align: left;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      margin: 20px 0;
+      background-color: #6b70ff;
+      color: white !important;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .muted {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #888888;
+      font-size: 12px;
+    }
+
+    .address-block p {
+      font-size: 10px;
+      line-height: 0.2;
+      margin-bottom: 5px;
+    }
+
+    .details {
+      background: #f7f9fc;
+      border: 1px solid #e6eaf2;
+      border-radius: 6px;
+      padding: 12px 16px;
+    }
+
+    .details p {
+      margin: 6px 0;
+    }
+
+    code {
+      background: #f4f6f8;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Export Data Berhasil</h1>
+    </div>
+    <div class="content">
+      <p>Halo <%= (locals && locals.name) ? locals.name : 'User' %>,</p>
+      <p>Permintaan export data <%= (locals.periode && locals.periode !=='' ) ? 'periode ' + locals.periode : '' %>
+          telah berhasil diproses.</p>
+
+      <% if (locals && locals.downloadUrl) { %>
+        <p>Silakan klik tombol di bawah ini untuk mengunduh file:</p>
+        <p>
+          <a href="<%= locals.downloadUrl %>" class="button" target="_blank" rel="noopener noreferrer">Download File</a>
+        </p>
+        <p class="muted">Jika tombol di atas tidak berfungsi, salin dan buka tautan berikut di browser Anda:</p>
+        <p><a href="<%= locals.downloadUrl %>">
+            <%= locals.downloadUrl %>
+          </a></p>
+        <% } %>
+
+          <div class="details">
+            <% if (locals && locals.module) { %>
+              <p><strong>Nama Laporan:</strong>
+                <%= locals.module %>
+              </p>
+              <% } %>
+                <% if (locals && locals.format) { %>
+                  <p><strong>Format:</strong>
+                    <%= locals.format %>
+                  </p>
+                  <% } %>
+                    <% if (locals && locals.size) { %>
+                      <p><strong>Ukuran File:</strong>
+                        <%= locals.size %>
+                      </p>
+                      <% } %>
+                        <p><strong>Tanggal Dibuat:</strong>
+                          <%= (locals && locals.createdAt) ? locals.createdAt : new Date().toLocaleString('id-ID') %>
+                        </p>
+          </div>
+
+          <p>Terima kasih,</p>
+          <p>
+            <span style="color: #33cccc"><strong>panasonic.co.id</strong></span>
+          </p>
+          <div class="address-block">
+            <p>PT. Panasonic Indonesia</p>
+          </div>
+    </div>
+    <div class="footer">
+      <p>Email ini dikirim secara otomatis. Mohon tidak membalas email ini.</p>
+    </div>
+  </div>
+</body>
+
+</html>

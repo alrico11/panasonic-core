@@ -21,7 +21,7 @@ export async function up(knex: Knex): Promise<void> {
         table.integer("updatedBy");
         table.text("description");
         table.integer("customerId").comment("Users.id (FK reference)").notNullable();
-        table.integer("customerType").comment("CustomerTypesEnum").notNullable();
+        table.string("customerType").comment("CustomerTypesEnum").notNullable();
         table.integer("irisId").comment("IRIS.id master data").notNullable();
         table.dateTime("scheduleDate"); 
         table.integer("claimId").comment("Claims.id (FK reference)");

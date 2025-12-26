@@ -1,4 +1,4 @@
-import { AuthenticationService, PartnerModel, TokenApp, UserModel, utils } from '@lib';
+import { AuthenticationService, PartnerModel, randomStrings, TokenApp, UserModel } from '@lib';
 import { ForbiddenException, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { compare, hashSync } from 'bcrypt';
@@ -15,7 +15,7 @@ export class AuthService {
         private readonly authenticationService: AuthenticationService,
         configService: ConfigService) {
         this.maxLoginAttempts = parseInt(configService.get('PARTNER_MAX_LOGIN_ATTEMPTS', '5'))
-        this.maxLoginExpiresIn = ms(configService.get('PARTNER_MAX_LOGIN_EXPIRES_IN', '1h'))
+        this.maxLoginExpiresIn = ms(configService.get('PARTNER_MAX_LOGIN_EXPIRES_IN', '1h') as ms.StringValue)
 
         if (isNaN(this.maxLoginAttempts))
             this.maxLoginAttempts = 5
@@ -109,7 +109,7 @@ export class AuthService {
             throw new UnauthorizedException('Invalid email or password')
         }
         // Create random Code
-        const code = utils.randomStrings(user.id.toString(36) + '-')
+        const code = randomStrings(user.id.toString(36) + '-')
 
         await PartnerModel.query().findById(partnerUser.id).update({
             forgotPassword: code
